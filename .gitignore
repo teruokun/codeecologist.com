@@ -1,0 +1,6 @@
+# OpenTofu: state is local and never committed (see infra/README.md)
+infra/.terraform/
+*.tfstate
+*.tfstate.*
+plan.bin
+*.tfvars
