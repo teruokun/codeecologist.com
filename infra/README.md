@@ -35,6 +35,7 @@ tofu apply plan.bin   # only after Jeff approves the plan output
 | `settings.tf` | TLS and HTTPS settings; edge HTML rewriting off |
 | `caa.tf` | CAA records, both zones |
 | `dns_com.tf` | `codeecologist.com` web records |
+| `mail.tf` | `codeecologist.com` mail: Fastmail MX, SPF, DKIM, DMARC, autodiscovery |
 | `dns_dev.tf` | `codeecologist.dev` placeholder and no-mail records |
 | `redirects.tf` | `.dev` to `.com`, and `www` to apex |
 | `imports.tf` | Import blocks for every managed resource, so state can be rebuilt |

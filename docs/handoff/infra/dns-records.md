@@ -26,12 +26,12 @@ TTL: `Auto` means Cloudflare automatic (300 s), which is required for proxied re
 
 | Type | Name | Value | TTL | Proxied | Purpose |
 |---|---|---|---|---|---|
-| MX | `@` | `in1-smtp.messagingengine.com` (pri 10) | 3600 | No | Inbound mail |
-| MX | `@` | `in2-smtp.messagingengine.com` (pri 20) | 3600 | No | Inbound mail, backup |
-| TXT | `@` | `v=spf1 include:spf.messagingengine.com ~all` | 3600 | No | SPF. See the note below on `~all`. |
-| CNAME | `fm1._domainkey` | `fm1.codeecologist.com.dkim.fmhosted.com` | 3600 | **No** | DKIM |
-| CNAME | `fm2._domainkey` | `fm2.codeecologist.com.dkim.fmhosted.com` | 3600 | **No** | DKIM |
-| CNAME | `fm3._domainkey` | `fm3.codeecologist.com.dkim.fmhosted.com` | 3600 | **No** | DKIM |
+| MX | `@` | `us1-smtp.messagingengine.com` (pri 10) | Auto | No | Inbound mail (Fastmail US region) |
+| MX | `@` | `us2-smtp.messagingengine.com` (pri 20) | Auto | No | Inbound mail, backup |
+| TXT | `@` | `v=spf1 include:spf.messagingengine.com ?all` | Auto | No | SPF. See the note below on `?all`. |
+| CNAME | `fm1._domainkey` | `fm1.codeecologist.com.dkim.fmhosted.com` | Auto | **No** | DKIM |
+| CNAME | `fm2._domainkey` | `fm2.codeecologist.com.dkim.fmhosted.com` | Auto | **No** | DKIM |
+| CNAME | `fm3._domainkey` | `fm3.codeecologist.com.dkim.fmhosted.com` | Auto | **No** | DKIM |
 | TXT | `_dmarc` | Stage 1: `v=DMARC1; p=none; rua=mailto:dmarc-reports@codeecologist.com; adkim=s; aspf=r; fo=1` | 3600 | No | DMARC monitoring |
 | TXT | `codeecologist.dev._report._dmarc` | `v=DMARC1` | 3600 | No | Lets the .dev zone's DMARC reports be sent to a .com address (RFC 7489 §7.1 external destination verification) |
 
@@ -45,7 +45,7 @@ DMARC ramp (Phase 2 → backlog). Move to the next stage only after reports show
 
 `adkim=s` is safe because Fastmail signs with `d=codeecologist.com`. `aspf=r` is used because the envelope sender may be a Fastmail bounce domain. If a stage-1 report shows SPF alignment failing while DKIM passes, that is expected. **VERIFY** this against the first reports.
 
-**SPF: `~all`, not `-all`.** DMARC at `p=reject` is the enforcement point. With `~all`, receivers can still evaluate DKIM and DMARC for forwarded mail where SPF breaks, instead of rejecting it at SMTP time on SPF alone (the M3AAWG/industry guidance for DMARC-protected domains). Fastmail's own default is `?all`; `~all` is slightly stricter. The `.dev` zone sends no mail, so it uses `-all`.
+**SPF: `?all`, Fastmail's default.** These six records were created by Jeff from Fastmail's setup screen (2026-11) and Fastmail reports them as verified, so they are kept exactly as created, including the US-region MX hosts and automatic TTL. DMARC is the enforcement point, not SPF. The `.dev` zone sends no mail, so it uses `-all`.
 
 ### Optional Fastmail client autodiscovery (SRV)
 

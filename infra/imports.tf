@@ -197,3 +197,35 @@ import {
   to = cloudflare_zone_setting.this["dev/tls_1_3"]
   id = "633dc02478af5a465ae732e681ce08d5/tls_1_3"
 }
+
+# Mail records that existed before OpenTofu managed the zone.
+
+import {
+  to = cloudflare_dns_record.com_mx["us1"]
+  id = "1ded37abaa70b34acec80b748e9b20e0/5e1c50ac5fed40a6bee2bcc39da1dbe7"
+}
+
+import {
+  to = cloudflare_dns_record.com_mx["us2"]
+  id = "1ded37abaa70b34acec80b748e9b20e0/7319de6f45af7d445f2ca56f82cfc5b8"
+}
+
+import {
+  to = cloudflare_dns_record.com_spf
+  id = "1ded37abaa70b34acec80b748e9b20e0/43dee3669205a422ca56a0980eadf4e0"
+}
+
+import {
+  to = cloudflare_dns_record.com_dkim["fm1"]
+  id = "1ded37abaa70b34acec80b748e9b20e0/463294d9a2236b6a5c41227cbfc5365a"
+}
+
+import {
+  to = cloudflare_dns_record.com_dkim["fm2"]
+  id = "1ded37abaa70b34acec80b748e9b20e0/72504d1e14cebf3ae42698215170f594"
+}
+
+import {
+  to = cloudflare_dns_record.com_dkim["fm3"]
+  id = "1ded37abaa70b34acec80b748e9b20e0/78b6378c94e4ad0b27a7b138c1646db0"
+}
