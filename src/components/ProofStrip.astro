@@ -1,0 +1,24 @@
+---
+import { getHomeCopy, isFilled } from '../lib/copy';
+
+const { proof } = await getHomeCopy();
+
+// Unconfirmed claims stay out of the page until Jeff has written them.
+const items = proof.filter(
+  (item) => !item.hidden_until_filled || (isFilled(item.lead) && isFilled(item.rest)),
+);
+---
+
+{
+  items.length > 0 && (
+    <section class="section" aria-label="Background">
+      <ul class="proof">
+        {items.map((item) => (
+          <li>
+            <b>{item.lead}</b> {item.rest}
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

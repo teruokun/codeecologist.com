@@ -1,0 +1,21 @@
+---
+import { getHomeCopy } from '../lib/copy';
+
+const { services } = await getHomeCopy();
+---
+
+<section class="section" id="services" aria-labelledby="services-heading">
+  <h2 id="services-heading">{services.heading}</h2>
+  <p class="sub">{services.subtitle}</p>
+  <ul class="grid3">
+    {
+      services.items.map((item) => (
+        <li class="card">
+          <h3>{item.title}</h3>
+          <p>{item.body}</p>
+          <span class="tag">{item.tag}</span>
+        </li>
+      ))
+    }
+  </ul>
+</section>

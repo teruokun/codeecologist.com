@@ -1,0 +1,4 @@
+Contact: mailto:security@codeecologist.com
+Expires: 2027-11-01T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://codeecologist.com/.well-known/security.txt

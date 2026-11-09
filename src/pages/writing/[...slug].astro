@@ -1,0 +1,32 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { formatDay, getPublished } from '../../lib/published';
+
+export async function getStaticPaths() {
+  const essays = await getPublished('essays');
+  return essays.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { title, description, pubDate, updatedDate } = entry.data;
+---
+
+<Base title={title} description={description}>
+  <article class="page prose">
+    <h1>{title}</h1>
+    <p class="sub">
+      <time datetime={pubDate.toISOString().slice(0, 10)}>{formatDay(pubDate)}</time>
+      {
+        updatedDate && (
+          <span>
+            {' · updated '}
+            <time datetime={updatedDate.toISOString().slice(0, 10)}>{formatDay(updatedDate)}</time>
+          </span>
+        )
+      }
+    </p>
+    <Content />
+  </article>
+</Base>

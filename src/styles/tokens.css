@@ -1,0 +1,45 @@
+/* Colour tokens, ported verbatim from docs/handoff/design/mockup.html. */
+:root {
+  --bg: #f6f4ee;
+  --surface: #fffdf8;
+  --ink: #1f2a22;
+  --muted: #5b6658;
+  --line: #dcd8cc;
+  --moss: #2f5d3a;
+  --moss-2: #e3ecdf;
+  --bark: #7a5a3a;
+  --accent: #b8743a;
+  --available: #3fa35b;
+  --on-accent: #17130e;
+  color-scheme: light;
+}
+
+/* Dark by system preference, unless the toggle has forced light. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #121612;
+    --surface: #1a201b;
+    --ink: #e7ece4;
+    --muted: #a3ad9f;
+    --line: #2c352d;
+    --moss: #8cc49a;
+    --moss-2: #1f2d22;
+    --bark: #c9a27b;
+    --accent: #e0a165;
+    color-scheme: dark;
+  }
+}
+
+/* Dark forced by the toggle. Keep in sync with the block above. */
+:root[data-theme='dark'] {
+  --bg: #121612;
+  --surface: #1a201b;
+  --ink: #e7ece4;
+  --muted: #a3ad9f;
+  --line: #2c352d;
+  --moss: #8cc49a;
+  --moss-2: #1f2d22;
+  --bark: #c9a27b;
+  --accent: #e0a165;
+  color-scheme: dark;
+}

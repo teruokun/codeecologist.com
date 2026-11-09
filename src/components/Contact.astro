@@ -1,0 +1,44 @@
+---
+import { getHomeCopy, isFilled } from '../lib/copy';
+
+const { contact, services } = await getHomeCopy();
+const topics = [...services.items.map((item) => item.title), contact.other_topic];
+---
+
+<section class="section" id="contact" aria-labelledby="contact-heading">
+  <h2 id="contact-heading">{contact.heading}</h2>
+  <p class="sub">
+    {contact.subtitle}
+    {isFilled(contact.response_time) && <span> {contact.response_time}</span>}
+  </p>
+  <div class="contact">
+    <div class="cal">
+      <p>{contact.booking_title}</p>
+      {
+        isFilled(contact.booking_url) ? (
+          <a class="btn" href={contact.booking_url} rel="noopener">
+            {contact.booking_cta}
+          </a>
+        ) : (
+          <p>{contact.booking_url}</p>
+        )
+      }
+    </div>
+    <!-- The /api/contact endpoint and its spam check arrive in Phase 5. -->
+    <form method="post" action="/api/contact">
+      <label for="contact-name">Name</label>
+      <input id="contact-name" name="name" type="text" autocomplete="name" maxlength="200" required />
+      <label for="contact-email">Email</label>
+      <input id="contact-email" name="email" type="email" autocomplete="email" required />
+      <label for="contact-topic">{contact.topic_label}</label>
+      <select id="contact-topic" name="topic">
+        {topics.map((topic) => <option>{topic}</option>)}
+      </select>
+      <label for="contact-message">Message</label>
+      <textarea id="contact-message" name="message" rows="4" maxlength="5000" required></textarea>
+      <div class="form-actions">
+        <button class="btn" type="submit">Send</button>
+      </div>
+    </form>
+  </div>
+</section>

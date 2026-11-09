@@ -1,0 +1,25 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatMonth, newsHref } from '../lib/published';
+
+interface Props {
+  news: CollectionEntry<'news'>[];
+}
+
+const { news } = Astro.props;
+---
+
+<ul class="talks">
+  {
+    news.map((entry) => (
+      <li class="talk">
+        <time class="when" datetime={entry.data.date.toISOString().slice(0, 10)}>
+          {formatMonth(entry.data.date)}
+        </time>
+        <div class="t">
+          <a href={newsHref(entry)}>{entry.data.title}</a>
+        </div>
+      </li>
+    ))
+  }
+</ul>

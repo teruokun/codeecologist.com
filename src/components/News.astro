@@ -1,0 +1,18 @@
+---
+import NewsList from './NewsList.astro';
+import { getHomeCopy } from '../lib/copy';
+import { getPublished } from '../lib/published';
+
+const copy = (await getHomeCopy()).news;
+const entries = await getPublished('news');
+---
+
+{
+  entries.length > 0 && (
+    <section class="section" id="news" aria-labelledby="news-heading">
+      <h2 id="news-heading">{copy.heading}</h2>
+      <p class="sub">{copy.subtitle}</p>
+      <NewsList news={entries} />
+    </section>
+  )
+}

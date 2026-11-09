@@ -1,0 +1,21 @@
+---
+import { getHomeCopy } from '../lib/copy';
+
+const { open_source } = await getHomeCopy();
+---
+
+<section class="section" id="oss" aria-labelledby="oss-heading">
+  <h2 id="oss-heading">{open_source.heading}</h2>
+  <p class="sub">{open_source.subtitle}</p>
+  <ul class="two">
+    {
+      open_source.items.map((item) => (
+        <li class="card">
+          <h3>{item.url ? <a href={item.url}>{item.title}</a> : item.title}</h3>
+          <p>{item.body}</p>
+          <span class="tag">{item.tag}</span>
+        </li>
+      ))
+    }
+  </ul>
+</section>

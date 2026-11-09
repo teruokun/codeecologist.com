@@ -1,0 +1,96 @@
+# All homepage copy lives here.
+#
+# Every value that starts with "TODO(jeff):" is a placeholder taken from the
+# layout mockup. It is not approved copy. `npm run check` lists what remains,
+# and a production deploy fails while any are left unless ALLOW_PLACEHOLDERS
+# is "true" (which also shows a "draft site" banner).
+#
+# Fields marked "hidden until filled" are unconfirmed claims or missing links:
+# they are not rendered at all while they are still placeholders.
+
+home:
+  site_name: Code Ecologist
+  meta_description: "TODO(jeff): one or two sentences describing the site for search results and link previews"
+
+  hero:
+    eyebrow: "TODO(jeff): Jeff · Software supply chain consultant"
+    headline: "TODO(jeff): Your software is an ecosystem. I help you keep it healthy."
+    lead: "TODO(jeff): I help engineering and security teams understand, secure and sustain the open source they depend on, from dependency risk to build provenance. 15 years as a senior engineer at Amazon."
+    primary_cta: "TODO(jeff): Book a 30-min intro call"
+    secondary_cta: "TODO(jeff): See services"
+    # Hidden until filled: availability is an unconfirmed claim.
+    availability: "TODO(jeff): Taking new engagements: 2 days/week available"
+    graph_alt: "TODO(jeff): Dependency graph illustration"
+    graph_label_root: "TODO(jeff): your app"
+    graph_label_keystone: "TODO(jeff): the keystone package"
+
+  services:
+    heading: "TODO(jeff): What I do"
+    subtitle: "TODO(jeff): Three ways to work together, sized to what you need."
+    items:
+      - title: "TODO(jeff): Supply chain risk assessment"
+        body: "TODO(jeff): A map of what you depend on, where the risk concentrates, and a prioritized plan. Fixed scope, fixed price."
+        tag: "TODO(jeff): Fixed price"
+      - title: "TODO(jeff): Build & pipeline hardening"
+        body: "TODO(jeff): SLSA-aligned builds, provenance and signing, SBOMs that are actually useful, and dependency policy that doesn't slow teams down."
+        tag: "TODO(jeff): Project or daily rate"
+      - title: "TODO(jeff): Advisory & retainer"
+        body: "TODO(jeff): A senior voice on call for architecture reviews, incident response for dependency compromises, and roadmap decisions."
+        tag: "TODO(jeff): Hourly or monthly"
+
+  proof:
+    - lead: "TODO(jeff): 15 years"
+      rest: "TODO(jeff): senior engineer at Amazon"
+    - lead: "TODO(jeff): BuildWarden"
+      rest: "TODO(jeff): maintainer"
+    # Hidden until filled: standards work is an unconfirmed claim.
+    - lead: "TODO(jeff): Standards work"
+      rest: "TODO(jeff): OpenSSF, SLSA, CycloneDX/SPDX"
+      hidden_until_filled: true
+    - lead: "TODO(jeff): Biology background"
+      rest: "TODO(jeff): ecosystems thinking, literally"
+
+  # These three sections, and their navigation links, appear only when the
+  # matching collection has at least one entry that is not a draft.
+  talks:
+    heading: "TODO(jeff): Talks"
+    subtitle: "TODO(jeff): Slides and recordings from conferences and meetups."
+  writing:
+    heading: "TODO(jeff): Writing"
+    subtitle: "TODO(jeff): Notes on dependencies, builds and the health of open source."
+  news:
+    heading: "TODO(jeff): News"
+    subtitle: "TODO(jeff): one line introducing the news section"
+
+  open_source:
+    heading: "TODO(jeff): Open source"
+    subtitle: "TODO(jeff): Work in the open is the best résumé."
+    items:
+      - title: BuildWarden
+        url: https://github.com/buildwarden/buildwarden
+        body: "TODO(jeff): One-line description of what BuildWarden does and who it's for."
+        tag: "TODO(jeff): GitHub ★ · Docs"
+      - title: "TODO(jeff): This website"
+        body: "TODO(jeff): Built in the open with signed commits, pinned dependencies, an SBOM and SLSA provenance on every deploy."
+        tag: "TODO(jeff): Practising what I preach"
+
+  contact:
+    heading: "TODO(jeff): Let's talk"
+    subtitle: "TODO(jeff): Book a time directly, or send a note."
+    # Hidden until filled: a response time is an unconfirmed claim.
+    response_time: "TODO(jeff): I'll reply within a business day."
+    booking_title: "TODO(jeff): 30-min intro call · pick a time"
+    booking_cta: "TODO(jeff): Choose a time"
+    # Hidden until filled: the booking button needs a real Cal.com URL.
+    booking_url: "TODO(jeff): Cal.com booking URL"
+    topic_label: "TODO(jeff): What can I help with?"
+    other_topic: "TODO(jeff): Speaking or something else"
+
+  footer:
+    owner: "TODO(jeff): Jeff"
+    location: "TODO(jeff): Seattle, WA"
+    # Hidden until filled.
+    business_name: "TODO(jeff): Business name LLC"
+    email: "TODO(jeff): public contact email address"
+    github_url: "TODO(jeff): GitHub profile URL"
+    linkedin_url: "TODO(jeff): LinkedIn profile URL"

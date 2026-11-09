@@ -1,0 +1,52 @@
+---
+import { getHomeCopy, isFilled } from '../lib/copy';
+
+const { hero } = await getHomeCopy();
+---
+
+<div class="hero">
+  <div>
+    <p class="eyebrow">{hero.eyebrow}</p>
+    <h1>{hero.headline}</h1>
+    <p class="lead">{hero.lead}</p>
+    <div class="cta">
+      <a class="btn" href="#contact">{hero.primary_cta}</a>
+      <a class="btn ghost" href="#services">{hero.secondary_cta}</a>
+    </div>
+    {
+      isFilled(hero.availability) && (
+        <p class="avail">
+          <span class="dot" aria-hidden="true" />
+          <span>{hero.availability}</span>
+        </p>
+      )
+    }
+  </div>
+  <div class="graph">
+    <svg viewBox="0 0 320 240" role="img" aria-label={hero.graph_alt}>
+      <g class="stroke-line">
+        <line x1="160" y1="40" x2="80" y2="110"></line>
+        <line x1="160" y1="40" x2="240" y2="110"></line>
+        <line x1="160" y1="40" x2="160" y2="120"></line>
+        <line x1="80" y1="110" x2="40" y2="190"></line>
+        <line x1="80" y1="110" x2="110" y2="190"></line>
+        <line x1="160" y1="120" x2="110" y2="190"></line>
+        <line x1="160" y1="120" x2="200" y2="190"></line>
+        <line x1="240" y1="110" x2="200" y2="190"></line>
+        <line x1="240" y1="110" x2="280" y2="190"></line>
+      </g>
+      <line class="stroke-accent" x1="160" y1="120" x2="200" y2="190"></line>
+      <line class="stroke-accent" x1="240" y1="110" x2="200" y2="190"></line>
+      <circle class="fill-moss" cx="160" cy="40" r="13"></circle>
+      <circle class="fill-moss-soft" cx="80" cy="110" r="10"></circle>
+      <circle class="fill-moss-soft" cx="160" cy="120" r="10"></circle>
+      <circle class="fill-moss-soft" cx="240" cy="110" r="10"></circle>
+      <circle class="fill-bark" cx="40" cy="190" r="8"></circle>
+      <circle class="fill-bark" cx="110" cy="190" r="8"></circle>
+      <circle class="fill-bark" cx="280" cy="190" r="8"></circle>
+      <circle class="fill-accent" cx="200" cy="190" r="11"></circle>
+      <text class="fill-muted" x="200" y="222" text-anchor="middle">{hero.graph_label_keystone}</text>
+      <text class="fill-muted" x="160" y="18" text-anchor="middle">{hero.graph_label_root}</text>
+    </svg>
+  </div>
+</div>

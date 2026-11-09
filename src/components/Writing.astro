@@ -1,0 +1,18 @@
+---
+import EssayList from './EssayList.astro';
+import { getHomeCopy } from '../lib/copy';
+import { getPublished } from '../lib/published';
+
+const copy = (await getHomeCopy()).writing;
+const entries = await getPublished('essays');
+---
+
+{
+  entries.length > 0 && (
+    <section class="section" id="writing" aria-labelledby="writing-heading">
+      <h2 id="writing-heading">{copy.heading}</h2>
+      <p class="sub">{copy.subtitle}</p>
+      <EssayList essays={entries} />
+    </section>
+  )
+}

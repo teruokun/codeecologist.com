@@ -1,0 +1,18 @@
+---
+import TalkList from './TalkList.astro';
+import { getHomeCopy } from '../lib/copy';
+import { getPublished } from '../lib/published';
+
+const copy = (await getHomeCopy()).talks;
+const entries = await getPublished('talks');
+---
+
+{
+  entries.length > 0 && (
+    <section class="section" id="talks" aria-labelledby="talks-heading">
+      <h2 id="talks-heading">{copy.heading}</h2>
+      <p class="sub">{copy.subtitle}</p>
+      <TalkList talks={entries} />
+    </section>
+  )
+}

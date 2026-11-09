@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import TalkList from '../../components/TalkList.astro';
+import { getHomeCopy } from '../../lib/copy';
+import { getPublished } from '../../lib/published';
+
+const copy = (await getHomeCopy()).talks;
+const entries = await getPublished('talks');
+const empty = entries.length === 0;
+---
+
+<!-- While empty, this page is not linked from anywhere and is kept out of search indexes. -->
+<Base title="Talks" noindex={empty}>
+  <div class="page">
+    <h1>{empty ? 'Talks' : copy.heading}</h1>
+    {empty ? <p>Nothing here yet.</p> : <TalkList talks={entries} />}
+  </div>
+</Base>
