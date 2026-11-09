@@ -37,6 +37,7 @@ tofu apply plan.bin   # only after Jeff approves the plan output
 | `dns_com.tf` | `codeecologist.com` web records |
 | `dns_dev.tf` | `codeecologist.dev` placeholder and no-mail records |
 | `redirects.tf` | `.dev` to `.com`, and `www` to apex |
+| `imports.tf` | Import blocks for every managed resource, so state can be rebuilt |
 | `snapshots/` | DNS exports taken before changes; the rollback reference |
 
 ## State
@@ -44,6 +45,11 @@ tofu apply plan.bin   # only after Jeff approves the plan output
 State is local (`infra/terraform.tfstate`) and gitignored. It holds resource
 IDs but no secrets. Losing it is an inconvenience, not an outage: every
 resource can be re-imported from the Cloudflare API.
+
+`imports.tf` lists every managed resource's ID. On a checkout with no state,
+`tofu plan` shows each resource as "will be imported" and nothing else;
+`tofu apply` then recreates the state without changing anything in
+Cloudflare. Add an import block whenever a resource is added.
 
 ## Not managed here
 
