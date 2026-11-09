@@ -4,3 +4,8 @@ infra/.terraform/
 *.tfstate.*
 plan.bin
 *.tfvars
+
+# Node / Astro
+node_modules/
+dist/
+.astro/

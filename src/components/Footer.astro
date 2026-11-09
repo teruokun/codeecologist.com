@@ -1,0 +1,32 @@
+---
+import { getHomeCopy, isFilled } from '../lib/copy';
+
+const { footer } = await getHomeCopy();
+const year = new Date().getFullYear();
+
+const owner = [footer.owner, isFilled(footer.business_name) ? footer.business_name : null, footer.location]
+  .filter(Boolean)
+  .join(' · ');
+
+// Links appear only once their real address has been filled in.
+const links = [
+  { label: footer.email, href: `mailto:${footer.email}`, show: isFilled(footer.email) },
+  { label: 'GitHub', href: footer.github_url, show: isFilled(footer.github_url) },
+  { label: 'LinkedIn', href: footer.linkedin_url, show: isFilled(footer.linkedin_url) },
+].filter((link) => link.show);
+---
+
+<footer class="site-footer">
+  <p>© {year} {owner}</p>
+  {
+    links.length > 0 && (
+      <ul class="footer-links">
+        {links.map((link) => (
+          <li>
+            <a href={link.href}>{link.label}</a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</footer>

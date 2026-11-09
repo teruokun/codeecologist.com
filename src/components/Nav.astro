@@ -1,0 +1,36 @@
+---
+import Logo from './Logo.astro';
+import { getHomeCopy } from '../lib/copy';
+
+const copy = await getHomeCopy();
+
+// Links to homepage sections. Absolute paths so they also work from other pages.
+const links = [
+  { href: '/#services', label: 'Services' },
+  { href: '/#oss', label: 'Open source' },
+  { href: '/#contact', label: 'Contact' },
+];
+---
+
+<nav class="site-nav" aria-label="Main">
+  <a class="logo" href="/">
+    <Logo />
+    {copy.site_name}
+  </a>
+  <ul class="links">
+    {links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
+  </ul>
+  <div class="nav-actions">
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" hidden>
+      Dark mode
+    </button>
+    <a class="btn" href="/#contact">Book a call</a>
+  </div>
+  <!-- Small screens: the same links in a menu that needs no JavaScript. -->
+  <details class="menu">
+    <summary>Menu</summary>
+    <ul class="links">
+      {links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
+    </ul>
+  </details>
+</nav>
