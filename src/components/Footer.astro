@@ -2,7 +2,7 @@
 import { getHomeCopy, isFilled } from '../lib/copy';
 import { getFeedItems } from '../lib/published';
 
-const { footer } = await getHomeCopy();
+const { footer, links: addresses } = await getHomeCopy();
 const year = new Date().getFullYear();
 const hasFeed = (await getFeedItems()).length > 0;
 
@@ -13,9 +13,9 @@ const owner = [footer.owner, isFilled(footer.business_name) ? footer.business_na
 // Links appear only once their real address has been filled in, and the RSS
 // link only once the feed has items.
 const links = [
-  { label: footer.email, href: `mailto:${footer.email}`, show: isFilled(footer.email) },
-  { label: 'GitHub', href: footer.github_url, show: isFilled(footer.github_url) },
-  { label: 'LinkedIn', href: footer.linkedin_url, show: isFilled(footer.linkedin_url) },
+  { label: addresses.email, href: `mailto:${addresses.email}`, show: isFilled(addresses.email) },
+  { label: 'GitHub', href: addresses.github_url, show: isFilled(addresses.github_url) },
+  { label: 'LinkedIn', href: addresses.linkedin_url, show: isFilled(addresses.linkedin_url) },
   { label: 'RSS', href: '/rss.xml', show: hasFeed },
 ].filter((link) => link.show);
 ---

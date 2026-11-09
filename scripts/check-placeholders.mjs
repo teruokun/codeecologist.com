@@ -2,9 +2,10 @@
 // built site. Exits 1 if any remain, unless ALLOW_PLACEHOLDERS is "true".
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const MARKER = 'TODO(jeff)';
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const copyFile = join(root, 'src/content/site/home.yaml');
 const distDir = join(root, 'dist');
 

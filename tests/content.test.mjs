@@ -2,23 +2,55 @@
 // Run with `npm test`. Fixtures live in tests/fixtures, never in src/content.
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { existsSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { after, test } from 'node:test';
+import { fileURLToPath } from 'node:url';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const outRoot = join(root, 'tests/.tmp');
-const astro = join(root, 'node_modules/.bin/astro');
+// Run Astro's entry point with this Node directly: node_modules/.bin/astro is
+// a shell shim, which spawnSync cannot run on Windows without a shell.
+const astro = join(root, 'node_modules/astro/bin/astro.mjs');
 
-/** Build with the given fixture set (or the real, empty content) into its own directory. */
-function build(name, fixture) {
+/**
+ * Build with the given fixture set (or the real, empty content) into its own
+ * directory. `siteCopy` replaces src/content/site/home.yaml.
+ */
+function build(name, fixture, { siteCopy } = {}) {
   const outDir = join(outRoot, name);
   const env = { ...process.env, ASTRO_TELEMETRY_DISABLED: '1' };
   if (fixture) env.CONTENT_ROOT = `tests/fixtures/${fixture}`;
   else delete env.CONTENT_ROOT;
-  const result = spawnSync(astro, ['build', '--outDir', outDir], { cwd: root, env, encoding: 'utf8' });
+  if (siteCopy) env.SITE_COPY = siteCopy;
+  else delete env.SITE_COPY;
+  const result = spawnSync(process.execPath, [astro, 'build', '--outDir', outDir], {
+    cwd: root,
+    env,
+    encoding: 'utf8',
+  });
   const read = (file) => readFileSync(join(outDir, file), 'utf8');
-  return { ok: result.status === 0, output: result.stdout + result.stderr, outDir, read };
+  return { ok: result.status === 0, output: `${result.stdout}${result.stderr}${result.error ?? ''}`, outDir, read };
+}
+
+/** Every file under dir. */
+function walk(dir) {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
+    entry.isDirectory() ? walk(join(dir, entry.name)) : [join(dir, entry.name)],
+  );
+}
+
+/** A copy of home.yaml with the given placeholder keys filled in, as a path relative to the root. */
+function filledCopy(values) {
+  let yaml = readFileSync(join(root, 'src/content/site/home.yaml'), 'utf8');
+  for (const [key, value] of Object.entries(values)) {
+    const pattern = new RegExp(String.raw`^(\s+${key}: )"TODO\(jeff\):[^"]*"`, 'm');
+    assert.match(yaml, pattern, `home.yaml has a ${key} placeholder`);
+    yaml = yaml.replace(pattern, `$1"${value}"`);
+  }
+  mkdirSync(outRoot, { recursive: true });
+  writeFileSync(join(outRoot, 'home-filled.yaml'), yaml);
+  return 'tests/.tmp/home-filled.yaml';
 }
 
 after(() => rmSync(outRoot, { recursive: true, force: true }));
@@ -77,4 +109,37 @@ test('a talk dated in the future fails the build', () => {
   const site = build('future-talk', 'future-talk');
   assert.ok(!site.ok, 'the build must fail');
   assert.match(site.output, /Only talks already given may be listed/);
+});
+
+test('contact: no form, no endpoint, no third-party script', () => {
+  const site = build('contact-empty');
+  assert.ok(site.ok, site.output);
+  const home = site.read('index.html');
+  assert.ok(home.includes('id="contact"'), 'the contact section is always shown');
+  assert.ok(!/<form[\s>]/.test(home), 'the homepage has no form');
+  assert.ok(!home.includes('mailto:'), 'no mailto link while the address is a placeholder');
+  for (const file of walk(site.outDir)) {
+    assert.ok(!readFileSync(file, 'utf8').includes('challenges.cloudflare.com'), `${file} mentions Turnstile`);
+  }
+  const csp = site.read('_headers').match(/Content-Security-Policy: (.*)/)[1];
+  assert.match(csp, /form-action 'none'/);
+  assert.match(csp, /script-src 'self';/);
+});
+
+test('contact: filled addresses link from the contact section and the footer', () => {
+  const siteCopy = filledCopy({
+    email: 'hello@example.com',
+    linkedin_url: 'https://www.linkedin.com/in/example',
+    booking_url: 'https://cal.com/example/intro',
+  });
+  const site = build('contact-filled', undefined, { siteCopy });
+  assert.ok(site.ok, site.output);
+  const home = site.read('index.html');
+  const contact = home.slice(home.indexOf('id="contact"'), home.indexOf('</section>', home.indexOf('id="contact"')));
+  assert.ok(contact.includes('href="mailto:hello@example.com"'), 'contact links the email');
+  assert.ok(contact.includes('href="https://www.linkedin.com/in/example"'), 'contact links LinkedIn');
+  assert.ok(contact.includes('href="https://cal.com/example/intro"'), 'contact links the booking page');
+  const footer = home.slice(home.indexOf('<footer'));
+  assert.ok(footer.includes('href="mailto:hello@example.com"'), 'footer links the same email');
+  assert.ok(footer.includes('href="https://www.linkedin.com/in/example"'), 'footer links the same LinkedIn');
 });

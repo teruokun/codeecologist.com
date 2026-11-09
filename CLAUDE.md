@@ -11,9 +11,9 @@ Planning docs (in the handoff package; copy them into `docs/handoff/` in the fir
 - **Astro** (static output, current major; **VERIFY** the version at scaffold time and pin it exactly) with content collections in `src/content.config.ts` (`glob` loader from `astro/loaders`, `z` from `astro/zod`). https://docs.astro.build/en/guides/content-collections/
 - `@astrojs/rss` for `/rss.xml` (essays + news)
 - **Cloudflare Pages** with Direct Upload from GitHub Actions via `wrangler pages deploy`. Cloudflare's git integration is **not** used.
-- **Pages Functions** (`functions/`) only for `POST /api/contact`, with **Turnstile** verification.
+- **No server code.** There is no contact form, so there are no Pages Functions, no Turnstile and no mail-sending credential. Contact is a `mailto:` link, LinkedIn and a Cal.com link-out (decided 2026-11-09, Phase 5).
 - **OpenTofu** in `infra/`, with the `cloudflare/cloudflare` provider v5 pinned exactly and `.terraform.lock.hcl` committed.
-- No CSS framework, no web fonts, no client-side framework. Plain CSS with tokens from the mockup. Use only the minimum JS: theme toggle, contact form submit, optional load-on-click Cal.com.
+- No CSS framework, no web fonts, no client-side framework. Plain CSS with tokens from the mockup. Use only the minimum JS: the theme toggle, and an optional load-on-click Cal.com embed.
 
 ## Layout
 
@@ -24,7 +24,6 @@ src/
   content/site/home.yaml # ALL homepage copy, TODO-marked
   components/  layouts/  pages/  styles/tokens.css
   lib/published.ts       # getPublished(name): non-draft entries, sorted
-functions/api/contact.ts
 public/_headers          # security headers (CSP etc.)
 infra/                   # OpenTofu; state is local + gitignored
 .github/workflows/{ci,deploy,scorecard}.yml
@@ -38,7 +37,7 @@ npm ci                      # always; never `npm install` in CI
 npm run dev                 # local dev
 npm run build               # astro build -> dist/
 npm run check               # astro check + placeholder scan + talks-date check
-npm run preview             # wrangler pages dev dist (functions included)
+npm run preview             # astro preview (serves dist/)
 cd infra && tofu init -lockfile=readonly && tofu plan -out=plan.bin
 tofu apply plan.bin         # ONLY after Jeff approves the plan output
 ```
@@ -55,7 +54,7 @@ tofu apply plan.bin         # ONLY after Jeff approves the plan output
 8. **SBOM:** `npm sbom --sbom-format=cyclonedx --sbom-type=application`, published at `/.well-known/sbom.cdx.json` (stable URL) and attested.
 9. **Provenance:** `actions/attest` (successor to `attest-build-provenance`, which is now a wrapper) over a checksums file covering every file in `dist/`. Visitors verify with `gh attestation verify <file> -R OWNER/codeecologist.com`.
 10. **Served bytes must equal built bytes.** Keep Cloudflare Email Obfuscation, Rocket Loader and analytics injection **off** (Tofu-managed).
-11. **No third-party JS or requests on page load** except Turnstile on the contact form (load the script when the form scrolls into view or gets focus). Cal.com is a link-out by default.
+11. **No third-party JS or requests at all.** Cal.com is a link-out. Adding a form, an endpoint or any third-party script reopens the Phase 5 decision and needs Jeff's approval.
 12. **Signed commits on `main`.** Claude works on branches and opens PRs. Jeff merges in the GitHub UI, and GitHub signs those merge commits. Tags are created and signed by Jeff.
 13. **No secrets in Tofu state or code.** Pages secrets are set with `wrangler pages secret put`, not in Tofu.
 
@@ -77,8 +76,8 @@ Push or merge to `main` → `deploy.yml`: build → SBOM → checksums → attes
 
 - Any `tofu apply`, and any DNS, MX or DMARC policy change (paste the plan and wait for "approve")
 - Adding or removing a dependency or GitHub Action
-- Changing workflow permissions, branch protection, CSP, HSTS values, or the Pages and Turnstile config
+- Changing workflow permissions, branch protection, CSP, HSTS values, or the Pages config
 - Publishing any copy (removing a `TODO(jeff)`), setting `draft: false`, or adding a talk
-- Anything touching email delivery (Fastmail, contact-form provider), or sending test mail to anyone except Jeff
+- Anything touching email delivery (Fastmail), or sending test mail to anyone except Jeff
 - Creating or rotating secrets (Jeff does it; Claude gives exact commands)
 - Opening PRs or issues in other repos (e.g. buildwarden)

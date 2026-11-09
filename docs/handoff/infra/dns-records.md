@@ -85,7 +85,7 @@ Notes:
 - Cloudflare says its CA list can change. **VERIFY** the reference page again on the day you apply.
 - Apply CAA **before** adding the Pages custom domain, so certificate issuance runs against the final policy.
 
-### Contact form sending (only if Option B in PLAN Phase 5 is chosen)
+### Contact form sending (not used: there is no contact form, decided 2026-11-09)
 
 | Type | Name | Value | Purpose |
 |---|---|---|---|

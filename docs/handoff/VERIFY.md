@@ -43,11 +43,11 @@ Run these after Phase 7. Record pass or fail and evidence (command output or a s
 - [ ] `npm run check` placeholder list shown to Jeff. Production either has zero `TODO(jeff)` or the draft banner is deliberately on.
 - [ ] `/rss.xml` is valid (https://validator.w3.org/feed/) once it has items
 - [ ] 404 page works: `curl -s -o /dev/null -w '%{http_code}' https://codeecologist.com/nope` → 404
-- [ ] Page load makes no third-party requests (DevTools, or https://webbkoll.5july.net for a privacy view). Turnstile loads only when the contact form is used.
+- [ ] Page load makes no third-party requests (DevTools, or https://webbkoll.5july.net for a privacy view). There is no Turnstile or other third-party script.
 - [ ] Lighthouse (mobile), Chrome DevTools or `npx lighthouse@<pinned> https://codeecologist.com --preset=perf`: Performance ≥ 95, Accessibility = 100 target (≥ 95 minimum), Best Practices ≥ 95, SEO ≥ 95
-- [ ] axe DevTools: 0 serious or critical issues. Keyboard-only walkthrough: skip link, focus visible, mobile menu, form fields labelled, errors announced.
+- [ ] axe DevTools: 0 serious or critical issues. Keyboard-only walkthrough: skip link, focus visible, mobile menu, contact links reachable and named.
 - [ ] Book a call: button opens Jeff's Cal.com page. (Jeff) Test booking appears in the Fastmail calendar via CalDAV, then cancel it.
-- [ ] Contact form: a submission with JS on and one with JS off both reach Jeff's inbox with the correct Reply-To; GET → 405; missing or replayed Turnstile token → rejected; honeypot → rejected silently
+- [ ] Contact: the homepage has no `<form>`; the email link opens a mail client addressed to Jeff; the LinkedIn and Cal.com links go to the right profiles; `curl -s https://codeecologist.com/api/contact -o /dev/null -w '%{http_code}'` → 404 (no endpoint exists)
 
 ## Supply chain
 - [ ] `gh attestation verify site-checksums.txt -R OWNER/codeecologist.com` passes, using the file downloaded from the live site (exact commands on /supply-chain)
