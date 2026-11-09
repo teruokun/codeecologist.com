@@ -95,6 +95,9 @@ resource "cloudflare_dns_record" "com_srv" {
   name    = "${each.key}.${var.primary_domain}"
   type    = "SRV"
   ttl     = 3600
+  # Cloudflare also reports the SRV priority at the top level. Setting it here
+  # as well keeps the plan free of drift.
+  priority = each.value.priority
   data = {
     priority = each.value.priority
     weight   = each.value.weight

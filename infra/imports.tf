@@ -229,3 +229,75 @@ import {
   to = cloudflare_dns_record.com_dkim["fm3"]
   id = "1ded37abaa70b34acec80b748e9b20e0/78b6378c94e4ad0b27a7b138c1646db0"
 }
+
+# Mail records created by OpenTofu.
+
+import {
+  to = cloudflare_dns_record.com_dmarc
+  id = "1ded37abaa70b34acec80b748e9b20e0/93cce4a0f65a9ece8fa4886dd28f2fb9"
+}
+
+import {
+  to = cloudflare_dns_record.com_dmarc_report_auth_dev
+  id = "1ded37abaa70b34acec80b748e9b20e0/c1f9df3914356b8e0c62da848c579ac5"
+}
+
+import {
+  to = cloudflare_dns_record.com_srv["_autodiscover._tcp"]
+  id = "1ded37abaa70b34acec80b748e9b20e0/d47bf5e0b514643226f8ed5c2dd24ce2"
+}
+
+import {
+  to = cloudflare_dns_record.com_srv["_caldav._tcp"]
+  id = "1ded37abaa70b34acec80b748e9b20e0/4255c2951c9beea00f4214cd29ab00cb"
+}
+
+import {
+  to = cloudflare_dns_record.com_srv["_caldavs._tcp"]
+  id = "1ded37abaa70b34acec80b748e9b20e0/73ef69d15b938324b362bf5b77ba5bbd"
+}
+
+import {
+  to = cloudflare_dns_record.com_srv["_carddav._tcp"]
+  id = "1ded37abaa70b34acec80b748e9b20e0/4398243e0e84732695cdb9ad81eb4df9"
+}
+
+import {
+  to = cloudflare_dns_record.com_srv["_carddavs._tcp"]
+  id = "1ded37abaa70b34acec80b748e9b20e0/0e338de480eb03a3dee1da03142fd4f2"
+}
+
+import {
+  to = cloudflare_dns_record.com_srv["_imap._tcp"]
+  id = "1ded37abaa70b34acec80b748e9b20e0/99cbee5f3bbb535169a11945c7b6ff22"
+}
+
+import {
+  to = cloudflare_dns_record.com_srv["_imaps._tcp"]
+  id = "1ded37abaa70b34acec80b748e9b20e0/034e33f4a4eeab10a82283c977be7a33"
+}
+
+import {
+  to = cloudflare_dns_record.com_srv["_jmap._tcp"]
+  id = "1ded37abaa70b34acec80b748e9b20e0/4f7dd9c7266b26b264413877181cd1d0"
+}
+
+import {
+  to = cloudflare_dns_record.com_srv["_pop3._tcp"]
+  id = "1ded37abaa70b34acec80b748e9b20e0/0851d718694beff7d805769a842c8105"
+}
+
+import {
+  to = cloudflare_dns_record.com_srv["_pop3s._tcp"]
+  id = "1ded37abaa70b34acec80b748e9b20e0/24008b5eee5192ccb95c14993f63acb1"
+}
+
+import {
+  to = cloudflare_dns_record.com_srv["_submission._tcp"]
+  id = "1ded37abaa70b34acec80b748e9b20e0/c45ab882a5dfe3935d9fdfecd0780953"
+}
+
+import {
+  to = cloudflare_dns_record.com_srv["_submissions._tcp"]
+  id = "1ded37abaa70b34acec80b748e9b20e0/6fa999444115aa6bf69f677933d08f5d"
+}
