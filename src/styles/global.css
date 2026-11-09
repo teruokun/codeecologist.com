@@ -459,3 +459,66 @@ select {
     order: 3;
   }
 }
+
+/* Talks and news lists */
+.talks {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.talk {
+  display: grid;
+  grid-template-columns: 110px 1fr auto;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: baseline;
+}
+
+.talk .when {
+  color: var(--bark);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.talk .t {
+  font-weight: 600;
+}
+
+.talk .ev,
+.talk .abstract {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0;
+}
+
+.talk .lk {
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* Essay and news pages */
+.prose {
+  max-width: 42em;
+}
+
+.prose img {
+  max-width: 100%;
+  height: auto;
+}
+
+.prose pre {
+  overflow-x: auto;
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+@media (max-width: 760px) {
+  .talk {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}

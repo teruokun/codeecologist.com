@@ -1,0 +1,25 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { formatDay, getPublished } from '../../lib/published';
+
+// News entries that link elsewhere have no page of their own.
+export async function getStaticPaths() {
+  const news = await getPublished('news');
+  return news
+    .filter((entry) => !entry.data.link)
+    .map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { title, date } = entry.data;
+---
+
+<Base title={title}>
+  <article class="page prose">
+    <h1>{title}</h1>
+    <p class="sub"><time datetime={date.toISOString().slice(0, 10)}>{formatDay(date)}</time></p>
+    <Content />
+  </article>
+</Base>

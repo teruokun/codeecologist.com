@@ -1,0 +1,32 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatMonth } from '../lib/published';
+
+interface Props {
+  talks: CollectionEntry<'talks'>[];
+}
+
+const { talks } = Astro.props;
+---
+
+<ul class="talks">
+  {
+    talks.map(({ data }) => (
+      <li class="talk">
+        <time class="when" datetime={data.date.toISOString().slice(0, 10)}>
+          {formatMonth(data.date)}
+        </time>
+        <div>
+          <div class="t">{data.title}</div>
+          <div class="ev">{[data.event, data.location].filter(Boolean).join(' · ')}</div>
+          {data.abstract && <p class="abstract">{data.abstract}</p>}
+        </div>
+        <span class="lk">
+          {data.slidesUrl && <a href={data.slidesUrl}>Slides</a>}
+          {data.slidesUrl && data.videoUrl && ' · '}
+          {data.videoUrl && <a href={data.videoUrl}>Video</a>}
+        </span>
+      </li>
+    ))
+  }
+</ul>

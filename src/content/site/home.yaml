@@ -50,6 +50,18 @@ home:
     - lead: "TODO(jeff): Biology background"
       rest: "TODO(jeff): ecosystems thinking, literally"
 
+  # These three sections, and their navigation links, appear only when the
+  # matching collection has at least one entry that is not a draft.
+  talks:
+    heading: "TODO(jeff): Talks"
+    subtitle: "TODO(jeff): Slides and recordings from conferences and meetups."
+  writing:
+    heading: "TODO(jeff): Writing"
+    subtitle: "TODO(jeff): Notes on dependencies, builds and the health of open source."
+  news:
+    heading: "TODO(jeff): News"
+    subtitle: "TODO(jeff): one line introducing the news section"
+
   open_source:
     heading: "TODO(jeff): Open source"
     subtitle: "TODO(jeff): Work in the open is the best résumé."

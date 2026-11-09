@@ -9,3 +9,6 @@ plan.bin
 node_modules/
 dist/
 .astro/
+
+# Test build output
+tests/.tmp/

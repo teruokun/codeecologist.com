@@ -1,8 +1,58 @@
 import { defineCollection } from 'astro:content';
-import { file } from 'astro/loaders';
+import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
 const text = z.string().min(1);
+
+// Tests point this at a fixture directory so that src/content never holds
+// test entries. Declared here because the project has no Node type package.
+declare const process: { env: Record<string, string | undefined> };
+const contentRoot = process.env.CONTENT_ROOT ?? 'src/content';
+
+const markdownIn = (name: string) =>
+  glob({ base: `${contentRoot}/${name}`, pattern: '**/*.md' });
+
+const sectionCopy = z.object({ heading: text, subtitle: text });
+
+// Only talks that have already been given may be listed. There is no
+// "upcoming" or "proposed" status: a future date fails the build.
+const talks = defineCollection({
+  loader: markdownIn('talks'),
+  schema: z.object({
+    title: text,
+    event: text,
+    location: text.optional(),
+    date: z.coerce
+      .date()
+      .refine((date) => date <= new Date(), 'Only talks already given may be listed'),
+    slidesUrl: z.url().optional(),
+    videoUrl: z.url().optional(),
+    abstract: text.optional(),
+    draft: z.boolean().default(false),
+  }),
+});
+
+const essays = defineCollection({
+  loader: markdownIn('essays'),
+  schema: z.object({
+    title: text,
+    description: text,
+    pubDate: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
+    draft: z.boolean().default(false),
+    ogImage: text.optional(),
+  }),
+});
+
+const news = defineCollection({
+  loader: markdownIn('news'),
+  schema: z.object({
+    title: text,
+    date: z.coerce.date(),
+    link: z.url().optional(),
+    draft: z.boolean().default(false),
+  }),
+});
 
 const site = defineCollection({
   loader: file('src/content/site/home.yaml'),
@@ -32,6 +82,9 @@ const site = defineCollection({
         hidden_until_filled: z.boolean().default(false),
       }),
     ),
+    talks: sectionCopy,
+    writing: sectionCopy,
+    news: sectionCopy,
     open_source: z.object({
       heading: text,
       subtitle: text,
@@ -60,4 +113,4 @@ const site = defineCollection({
   }),
 });
 
-export const collections = { site };
+export const collections = { site, talks, essays, news };

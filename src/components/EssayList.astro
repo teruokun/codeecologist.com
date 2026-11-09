@@ -1,0 +1,26 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatMonth } from '../lib/published';
+
+interface Props {
+  essays: CollectionEntry<'essays'>[];
+}
+
+const { essays } = Astro.props;
+---
+
+<ul class="two">
+  {
+    essays.map((entry) => (
+      <li class="card">
+        <time class="eyebrow" datetime={entry.data.pubDate.toISOString().slice(0, 10)}>
+          {formatMonth(entry.data.pubDate)}
+        </time>
+        <h3>
+          <a href={`/writing/${entry.id}/`}>{entry.data.title}</a>
+        </h3>
+        <p>{entry.data.description}</p>
+      </li>
+    ))
+  }
+</ul>

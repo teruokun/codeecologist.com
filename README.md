@@ -16,6 +16,7 @@ npm run dev       # local development server
 npm run build     # build to dist/
 npm run check     # type check, then list remaining TODO(jeff) placeholders
 npm run preview   # serve the built site
+npm test          # build against fixture content and check what is shown
 ```
 
 `npm run check` fails while placeholder copy remains. Set
@@ -27,8 +28,10 @@ on every page.
 | Path | Contents |
 |---|---|
 | `src/content/site/home.yaml` | All homepage copy |
+| `src/content/{talks,essays,news}/` | Markdown entries. A section appears on the site only once it has an entry that is not a draft |
 | `src/components/`, `src/layouts/`, `src/pages/` | Astro components and pages |
 | `src/styles/` | Plain CSS; colour tokens in `tokens.css` |
+| `tests/` | Build-based tests and their fixture content |
 | `public/_headers` | Security headers, including the Content-Security-Policy |
 | `infra/` | OpenTofu for DNS, zone settings and redirects; see [`infra/README.md`](infra/README.md) |
 | `docs/handoff/` | The original plan, DNS spec and design mockup |

@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import EssayList from '../../components/EssayList.astro';
+import { getHomeCopy } from '../../lib/copy';
+import { getPublished } from '../../lib/published';
+
+const copy = (await getHomeCopy()).writing;
+const entries = await getPublished('essays');
+const empty = entries.length === 0;
+---
+
+<!-- While empty, this page is not linked from anywhere and is kept out of search indexes. -->
+<Base title="Writing" noindex={empty}>
+  <div class="page">
+    <h1>{empty ? 'Writing' : copy.heading}</h1>
+    {empty ? <p>Nothing here yet.</p> : <EssayList essays={entries} />}
+  </div>
+</Base>

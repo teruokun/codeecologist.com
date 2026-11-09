@@ -1,15 +1,26 @@
 ---
 import Logo from './Logo.astro';
 import { getHomeCopy } from '../lib/copy';
+import { getPublished } from '../lib/published';
 
 const copy = await getHomeCopy();
 
-// Links to homepage sections. Absolute paths so they also work from other pages.
+// Links to homepage sections. Absolute paths so they also work from other
+// pages. Talks, Writing and News are linked only once they have entries.
+const [talks, essays, news] = await Promise.all([
+  getPublished('talks'),
+  getPublished('essays'),
+  getPublished('news'),
+]);
+
 const links = [
-  { href: '/#services', label: 'Services' },
-  { href: '/#oss', label: 'Open source' },
-  { href: '/#contact', label: 'Contact' },
-];
+  { href: '/#services', label: 'Services', show: true },
+  { href: '/#talks', label: 'Talks', show: talks.length > 0 },
+  { href: '/#writing', label: 'Writing', show: essays.length > 0 },
+  { href: '/#news', label: 'News', show: news.length > 0 },
+  { href: '/#oss', label: 'Open source', show: true },
+  { href: '/#contact', label: 'Contact', show: true },
+].filter((link) => link.show);
 ---
 
 <nav class="site-nav" aria-label="Main">

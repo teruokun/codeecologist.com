@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import { allowPlaceholders, getHomeCopy } from '../lib/copy';
+import { getFeedItems } from '../lib/published';
 
 interface Props {
   /** Page title. The site name is appended unless this is the homepage. */
@@ -16,6 +17,7 @@ const copy = await getHomeCopy();
 const { title, description = copy.meta_description, noindex = false } = Astro.props;
 const fullTitle = title ? `${title} · ${copy.site_name}` : copy.site_name;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const hasFeed = (await getFeedItems()).length > 0;
 ---
 
 <!doctype html>
@@ -27,6 +29,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
+    {
+      hasFeed && (
+        <link rel="alternate" type="application/rss+xml" title={copy.site_name} href="/rss.xml" />
+      )
+    }
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={copy.site_name} />
