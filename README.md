@@ -14,14 +14,16 @@ Requires the Node.js version in [`.node-version`](.node-version).
 npm ci
 npm run dev       # local development server
 npm run build     # build to dist/
-npm run check     # type check, then list remaining TODO(jeff) placeholders
+npm run check     # type check, build, then check for TODO(jeff) placeholders
 npm run preview   # serve the built site
 npm test          # build against fixture content and check what is shown
 ```
 
-`npm run check` fails while placeholder copy remains. Set
-`ALLOW_PLACEHOLDERS=true` to build a draft, which shows a "draft site" banner
-on every page.
+`npm run check` fails while placeholder copy appears in the built site.
+Placeholders that are not shown (hidden-until-filled fields, and sections
+that stay hidden until they have a published entry) are listed as pending but
+don't fail. Set `ALLOW_PLACEHOLDERS=true` to build a draft with shown
+placeholders, which adds a "draft site" banner on every page.
 
 ## Layout
 

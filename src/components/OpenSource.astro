@@ -14,6 +14,7 @@ const { open_source } = await getHomeCopy();
           <h3>{item.url ? <a href={item.url}>{item.title}</a> : item.title}</h3>
           <p>{item.body}</p>
           <span class="tag">{item.tag}</span>
+          {item.docs_url && <a class="docs-link" href={item.docs_url}>Docs</a>}
         </li>
       ))
     }

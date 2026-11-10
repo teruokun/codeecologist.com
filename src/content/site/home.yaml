@@ -2,8 +2,9 @@
 #
 # Every value that starts with "TODO(jeff):" is a placeholder taken from the
 # layout mockup. It is not approved copy. `npm run check` lists what remains,
-# and a production deploy fails while any are left unless ALLOW_PLACEHOLDERS
-# is "true" (which also shows a "draft site" banner).
+# and a production deploy fails while any is shown on the site unless
+# ALLOW_PLACEHOLDERS is "true" (which also shows a "draft site" banner).
+# Placeholders that are not shown are pending and don't block a deploy.
 #
 # Fields marked "hidden until filled" are unconfirmed claims or missing links:
 # they are not rendered at all while they are still placeholders. Fields
@@ -11,51 +12,54 @@
 
 home:
   site_name: Code Ecologist
-  meta_description: "TODO(jeff): one or two sentences describing the site for search results and link previews"
+  meta_description: "Jeff Edwards is a Seattle-based software supply chain consultant who helps teams understand, secure and sustain the open source software they depend on."
 
   hero:
-    eyebrow: "TODO(jeff): Jeff · Software supply chain consultant"
-    headline: "TODO(jeff): Your software is an ecosystem. I help you keep it healthy."
-    lead: "TODO(jeff): I help engineering and security teams understand, secure and sustain the open source they depend on, from dependency risk to build provenance. 15 years as a senior engineer at Amazon."
-    primary_cta: "TODO(jeff): Book a 30-min intro call"
-    secondary_cta: "TODO(jeff): See services"
+    eyebrow: "Jeff Edwards · Software supply chain consultant"
+    headline: "Open source software is an evolving ecosystem. I can help you evolve alongside it."
+    lead: "I help companies and product owners build sustainable practices for using open source software over the long term. I spent 15 years at AWS, including more than 5 building the tools and practices behind Amazon's own use of open source. That work spanned a wide range of use cases and regulatory needs, and I can help you with everything from dependency risk to build provenance and SBOMs."
+    primary_cta: "Book a 45-minute intro call"
+    secondary_cta: "See services"
     # Optional claim.
     availability: "Taking new engagements: 3 days/week available"
-    graph_alt: "TODO(jeff): Dependency graph illustration"
-    graph_label_root: "TODO(jeff): your app"
-    graph_label_keystone: "TODO(jeff): the keystone package"
+    graph_alt: "Dependency graph illustration"
+    graph_label_root: "Your app"
+    graph_label_keystone: "A risk you didn't pick"
 
   services:
-    heading: "TODO(jeff): What I do"
-    # The mockup's subtitle described services and pricing together; it needs
-    # rewording now that they are separate lists.
-    subtitle: "TODO(jeff): Three ways to work together, sized to what you need."
-    # The kinds of work. No pricing here: that is in engagements below.
+    heading: "What I do"
+    subtitle: "Practical help that starts from where your team is today."
     items:
-      - title: "TODO(jeff): Supply chain risk assessment"
-        body: "TODO(jeff): A map of what you depend on, where the risk concentrates, and a prioritized plan."
-      - title: "TODO(jeff): Build & pipeline hardening"
-        body: "TODO(jeff): SLSA-aligned builds, provenance and signing, SBOMs that are actually useful, and dependency policy that doesn't slow teams down."
-      # No on-call or incident-response wording until Jeff offers it.
-      - title: "TODO(jeff): Advisory"
-        body: "TODO(jeff): A senior voice for architecture reviews and roadmap decisions."
-    # The kinds of contract, from the mockup's pricing tags. The subtitle and
-    # each item's body are optional.
+      - title: "Supply chain risk assessment"
+        body: "A map of what you depend on today, where the risk is concentrated, and a plan to reduce it, with optional hands-on help carrying it out."
+      - title: "Build & pipeline hardening"
+        body: "SLSA-aligned builds, SBOMs and other transparency documents people actually use, and dependency policy that works at scale without slowing teams down."
+      - title: "Agentic AI in development"
+        body: "Bring coding agents into your workflow while keeping track of what they add to your code, dependencies and builds."
+      - title: "On-demand advisor"
+        body: "A senior voice for architecture reviews and scalability assessments."
+    # The engagement subtitle and each item's body are optional.
     engagements:
-      heading: "TODO(jeff): Ways to work together"
+      heading: "Ways to work together"
       items:
-        - title: "TODO(jeff): Fixed-scope, fixed-price project"
-        - title: "TODO(jeff): Daily rate"
-        - title: "TODO(jeff): Hourly"
-        - title: "TODO(jeff): Monthly retainer"
+        - title: "Fixed-scope, fixed-price project"
+        - title: "Daily rate"
+        - title: "Hourly"
+        - title: "Monthly retainer"
 
   proof:
-    - lead: "TODO(jeff): 15 years"
-      rest: "TODO(jeff): senior engineer at Amazon"
-    - lead: "TODO(jeff): BuildWarden"
-      rest: "TODO(jeff): maintainer"
-    - lead: "TODO(jeff): Biology background"
-      rest: "TODO(jeff): ecosystems thinking, literally"
+    - lead: "Experience at scale"
+      rest: "5 years of experience in S3 and DynamoDB operations"
+    - lead: "Serving diverse use cases"
+      rest: "5 years of experience as Amazon's Python ecosystem lead"
+    - lead: "Secure supply chain contributor"
+      rest: "BuildWarden maintainer and author of its build ledger specification"
+    - lead: "Science-trained"
+      rest: "Molecular and cellular biology, University of Washington; former research associate at the Allen Institute for Brain Science"
+    # Hidden until filled: your agentic AI work at Amazon and on BuildWarden.
+    - lead: "TODO(jeff): Agentic development"
+      rest: "TODO(jeff): what you did with agentic AI development at Amazon and on BuildWarden"
+      hidden_until_filled: true
 
   # These three sections, and their navigation links, appear only when the
   # matching collection has at least one entry that is not a draft.
@@ -70,31 +74,34 @@ home:
     subtitle: "TODO(jeff): one line introducing the news section"
 
   open_source:
-    heading: "TODO(jeff): Open source"
-    subtitle: "TODO(jeff): Work in the open is the best résumé."
+    heading: "Open source"
+    subtitle: "Transparency is the foundation of trust and accountability."
     items:
       - title: BuildWarden
         url: https://github.com/buildwarden/buildwarden
-        body: "TODO(jeff): One-line description of what BuildWarden does and who it's for."
-        tag: "TODO(jeff): GitHub ★ · Docs"
-      - title: "TODO(jeff): This website"
-        body: "TODO(jeff): Built in the open with signed commits, pinned dependencies, an SBOM and SLSA provenance on every deploy."
-        tag: "TODO(jeff): Practising what I preach"
+        body: "An instrumented, multi-platform build sandbox that produces a signed, tamper-evident ledger of every network input to a build."
+        tag: "Apache-2.0"
+        # Optional: adds a "Docs" link next to the tag.
+        docs_url: https://buildwarden.github.io/buildwarden/
+      - title: "This website"
+        url: https://github.com/teruokun/codeecologist.com
+        body: "Built in the open with exact-pinned dependencies, no install scripts and no third-party scripts."
+        tag: "Practicing what I preach"
 
   contact:
-    heading: "TODO(jeff): Let's talk"
-    subtitle: "TODO(jeff): Book a time directly, or write to me."
+    heading: "Let's talk"
+    subtitle: "Book a time directly, or reach me over LinkedIn or email."
     # Optional claim.
     response_time: "I'll reply within a business day."
-    booking_title: "TODO(jeff): 30-min intro call · pick a time"
-    booking_cta: "TODO(jeff): Choose a time"
+    booking_title: "45-minute intro call · pick a time"
+    booking_cta: "Choose a time"
     # Hidden until filled: the booking button needs a real Cal.com URL.
     booking_url: "https://cal.com/codeecologist"
-    direct_title: "TODO(jeff): Or reach me directly"
+    direct_title: "Or reach me directly"
 
   footer:
-    owner: "TODO(jeff): Jeff"
-    location: "TODO(jeff): Seattle, WA"
+    owner: "Jeff Edwards"
+    location: "Seattle, WA"
     # Optional claim: empty until the business is formed.
     business_name: ""
 

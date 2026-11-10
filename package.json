@@ -9,7 +9,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check && node scripts/check-placeholders.mjs",
+    "check": "astro check && astro build && node scripts/check-placeholders.mjs",
     "test": "node --test tests/"
   },
   "dependencies": {

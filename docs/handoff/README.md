@@ -61,7 +61,7 @@ Phases 3–4 don't depend on 1–2 and can run in parallel with them. Phase 6 ne
 | Cloudflare Email Obfuscation and Rocket Loader off | They rewrite HTML, which would break provenance verification |
 | Tofu state local and gitignored, backed up manually; DNSSEC and registrar lock managed in the dashboard | Single operator, no secrets in state, everything re-importable. The Registrar's one-click DNSSEC flow shouldn't be fought by Tofu. |
 | Dependabot (not Renovate) | Native to GitHub, no third-party app |
-| Production deploy fails while `TODO(jeff)` placeholders remain, unless `ALLOW_PLACEHOLDERS=true` (which shows a draft banner) | Prevents shipping invented-looking copy by accident |
+| Production deploy fails while `TODO(jeff)` placeholders appear in the built site, unless `ALLOW_PLACEHOLDERS=true` (which shows a draft banner). Hidden placeholders are pending and don't block (updated 2026-11-10) | Prevents shipping invented-looking copy by accident |
 | Talks schema rejects future dates | Makes "only talks actually given" a build-time guarantee |
 | No analytics | No third-party JS. Cloudflare Web Analytics can be opted into later. |
 | `www` → apex 301 on .com | Single canonical host |
