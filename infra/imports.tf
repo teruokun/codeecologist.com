@@ -301,3 +301,19 @@ import {
   to = cloudflare_dns_record.com_srv["_submissions._tcp"]
   id = "1ded37abaa70b34acec80b748e9b20e0/6fa999444115aa6bf69f677933d08f5d"
 }
+
+# Phase 6: Pages project, its custom domain and the apex CNAME.
+import {
+  to = cloudflare_pages_project.site
+  id = "45e77196e408258564696e55588b9fd7/codeecologist"
+}
+
+import {
+  to = cloudflare_pages_domain.apex
+  id = "45e77196e408258564696e55588b9fd7/codeecologist/codeecologist.com"
+}
+
+import {
+  to = cloudflare_dns_record.com_apex
+  id = "1ded37abaa70b34acec80b748e9b20e0/08f6f8acd2355bf81e6082f2fcfeb285"
+}

@@ -3,10 +3,10 @@
 # integration is deliberately not used, so Cloudflare never builds the site
 # and never holds access to the repository.
 #
-# Applied in two steps (see docs/handoff/infra/dns-records.md):
-#   1. The project and the custom domain (this file).
-#   2. The apex CNAME to <project>.pages.dev. Cloudflare may create it on its
-#      own when the domain is attached; if so it is imported, not created.
+# The custom domain is attached before the apex CNAME exists (a CNAME
+# without the Pages association returns 522). Cloudflare did not create the
+# CNAME on its own when the domain was attached on 2026-11-10, so it is
+# managed here.
 
 locals {
   account_id    = data.cloudflare_zone.com.account.id
@@ -25,4 +25,16 @@ resource "cloudflare_pages_domain" "apex" {
   account_id   = local.account_id
   project_name = cloudflare_pages_project.site.name
   name         = var.primary_domain
+}
+
+# Apex to Pages, proxied; Cloudflare flattens the CNAME at the apex.
+resource "cloudflare_dns_record" "com_apex" {
+  zone_id = local.zones.com.id
+  name    = var.primary_domain
+  type    = "CNAME"
+  content = cloudflare_pages_project.site.subdomain
+  ttl     = 1
+  proxied = true
+
+  depends_on = [cloudflare_pages_domain.apex]
 }
