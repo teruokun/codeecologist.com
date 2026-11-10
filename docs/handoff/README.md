@@ -4,7 +4,7 @@ This package lets a Claude Code session, with Jeff's GitHub repos and a Cloudfla
 - the consulting website (Astro on Cloudflare Pages, deployed from GitHub Actions with SBOM and SLSA provenance)
 - DNS and zone hardening for `codeecologist.com` (primary) and `codeecologist.dev` (301 redirect), managed with OpenTofu
 - Fastmail mail DNS
-- the contact form (Pages Function + Turnstile)
+- the contact section (mailto, LinkedIn and Cal.com links; the original contact-form plan was dropped in Phase 5)
 
 | File | Purpose |
 |---|---|
@@ -37,13 +37,13 @@ Phases 3–4 don't depend on 1–2 and can run in parallel with them. Phase 6 ne
 - [ ] In the Registrar dashboard: **registrar lock**, **auto-renew**, **Enable DNSSEC** on both domains (none of these can be done with the API token)
 - [ ] Fastmail Individual signup; `codeecologist.com` added; aliases `dmarc-reports@` and `security@` created
 - [ ] Cal.com signup, Fastmail calendar connected via CalDAV (with a Fastmail app password), 30-min event created
-- [ ] Cloudflare **infra token** created with the permissions in SECRETS.md, including **Turnstile Edit** (this was added to the original "zones + Pages" scope), with a 30-day expiry
+- [ ] Cloudflare **infra token** created with the permissions in SECRETS.md, (Turnstile Edit is no longer needed: there is no contact form), with a 30-day expiry
 - [ ] Empty GitHub repo + Claude GitHub App installed
 - [ ] Fastmail connector connected in Claude (for inbox and calendar triage; not used by the site)
 
 **During the session:**
 - Phase 2: paste or screenshot the DNS values shown in **Fastmail > Settings > Domains**. They override dns-records.md.
-- Phase 5: choose the contact delivery option (recommended: B, a send-only transactional email key; see below). Sign up with the provider if B. Set the Pages secrets.
+- Phase 5: decided 2026-11-09: no contact form. Fill in the email, LinkedIn and Cal.com links in `home.yaml`.
 - Phase 6: create the **deploy token** (Pages Edit only) and add it to the GitHub `production` environment. Set the branch ruleset if the GitHub App lacks admin rights. Set up commit and tag signing on your machine.
 - Throughout: approve every `tofu plan`; replace `TODO(jeff)` copy; send your Cal.com booking URL.
 
@@ -52,7 +52,7 @@ Phases 3–4 don't depend on 1–2 and can run in parallel with them. Phase 6 ne
 | Decision | Why |
 |---|---|
 | **Cal.com: plain link-out button by default.** An inline embed is backlog, and would load only on click. | The embed loads Cal.com JS on our origin and needs CSP exceptions. A link has zero third-party code, which matches the supply-chain story. |
-| **Contact delivery: transactional email API with a sending-only key** (Resend suggested, Postmark as alternate) over Fastmail JMAP | Fastmail's narrowest token that can write mail is "Email", which can read and delete the whole mailbox. A public endpoint shouldn't hold that. |
+| **No contact form** (overrides the original "transactional email API" decision, 2026-11-09): mailto, LinkedIn and Cal.com links only | A form needs a public endpoint, a mail-sending key and a third-party spam check. Plain links need none of these. |
 | SPF `~all` on .com, `-all` on .dev | DMARC does the enforcement; `~all` avoids SMTP-time rejects on forwarded mail. .dev never sends. |
 | `actions/attest` instead of `actions/attest-build-provenance` | The latter is now a wrapper; GitHub says new implementations should use `actions/attest`. |
 | Attest a checksums file of every built file (one subject per file) | Lets anyone `curl` a live page and run `gh attestation verify` on it directly |

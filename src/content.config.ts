@@ -54,8 +54,11 @@ const news = defineCollection({
   }),
 });
 
+// Tests may point this at a modified copy of home.yaml.
+const siteCopy = process.env.SITE_COPY ?? 'src/content/site/home.yaml';
+
 const site = defineCollection({
-  loader: file('src/content/site/home.yaml'),
+  loader: file(siteCopy),
   schema: z.object({
     site_name: text,
     meta_description: text,
@@ -99,13 +102,14 @@ const site = defineCollection({
       booking_title: text,
       booking_cta: text,
       booking_url: text,
-      topic_label: text,
-      other_topic: text,
+      direct_title: text,
     }),
     footer: z.object({
       owner: text,
       location: text,
       business_name: text,
+    }),
+    links: z.object({
       email: text,
       github_url: text,
       linkedin_url: text,

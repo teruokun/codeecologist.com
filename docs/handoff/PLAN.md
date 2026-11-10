@@ -146,6 +146,8 @@ Rollback: revert the PR.
 
 ## Phase 5: Contact form + Turnstile
 
+> **Superseded 2026-11-09: no contact form.** Jeff chose a `mailto:` link, LinkedIn and the Cal.com link-out instead. That removes the Pages Function, the Turnstile widget (whose secret the Cloudflare provider would also have put in Tofu state, against CLAUDE.md rule 13) and the mail-sending key. Phase 5 now consists of: the contact section with those three links, removing `challenges.cloudflare.com` from the CSP and setting `form-action 'none'`. The original plan below is kept for reference only.
+
 Files: `functions/api/contact.ts`, `src/components/Contact.astro`, `infra/turnstile.tf` (or a manual widget plus import), `wrangler.toml` (Pages config: `pages_build_output_dir = "dist"`, `compatibility_date` pinned).
 
 Delivery decision. **Recommendation: Option B** (Jeff to confirm):

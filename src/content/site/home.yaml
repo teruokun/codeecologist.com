@@ -76,21 +76,25 @@ home:
 
   contact:
     heading: "TODO(jeff): Let's talk"
-    subtitle: "TODO(jeff): Book a time directly, or send a note."
+    subtitle: "TODO(jeff): Book a time directly, or write to me."
     # Hidden until filled: a response time is an unconfirmed claim.
     response_time: "TODO(jeff): I'll reply within a business day."
     booking_title: "TODO(jeff): 30-min intro call · pick a time"
     booking_cta: "TODO(jeff): Choose a time"
     # Hidden until filled: the booking button needs a real Cal.com URL.
     booking_url: "TODO(jeff): Cal.com booking URL"
-    topic_label: "TODO(jeff): What can I help with?"
-    other_topic: "TODO(jeff): Speaking or something else"
+    direct_title: "TODO(jeff): Or reach me directly"
 
   footer:
     owner: "TODO(jeff): Jeff"
     location: "TODO(jeff): Seattle, WA"
     # Hidden until filled.
     business_name: "TODO(jeff): Business name LLC"
+
+  # Addresses shown in both the contact section and the footer. There is no
+  # contact form: email, LinkedIn and the booking link are the only channels.
+  # Each link appears only once its real address is filled in.
+  links:
     email: "TODO(jeff): public contact email address"
     github_url: "TODO(jeff): GitHub profile URL"
     linkedin_url: "TODO(jeff): LinkedIn profile URL"

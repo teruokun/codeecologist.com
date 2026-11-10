@@ -367,7 +367,7 @@ h2 {
   gap: 20px;
 }
 
-.cal {
+.contact-card {
   background: var(--surface);
   border: 1px dashed var(--moss);
   border-radius: 12px;
@@ -381,31 +381,18 @@ h2 {
   color: var(--muted);
 }
 
-.cal p {
+.contact-card p {
   margin: 0;
 }
 
-label {
-  display: block;
-  font-size: 14px;
+.direct-links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
   font-weight: 600;
-  margin: 10px 0 4px;
-}
-
-input,
-textarea,
-select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid var(--muted);
-  border-radius: 8px;
-  background: var(--bg);
-  color: var(--ink);
-  font: inherit;
-}
-
-.form-actions {
-  margin-top: 14px;
 }
 
 /* Footer */
