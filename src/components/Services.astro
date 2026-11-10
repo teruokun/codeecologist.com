@@ -13,7 +13,18 @@ const { services } = await getHomeCopy();
         <li class="card">
           <h3>{item.title}</h3>
           <p>{item.body}</p>
-          <span class="tag">{item.tag}</span>
+        </li>
+      ))
+    }
+  </ul>
+  <h3 class="subhead" id="engagements-heading">{services.engagements.heading}</h3>
+  {services.engagements.subtitle && <p class="sub">{services.engagements.subtitle}</p>}
+  <ul class="engagements" aria-labelledby="engagements-heading">
+    {
+      services.engagements.items.map((item) => (
+        <li class="card">
+          <h4>{item.title}</h4>
+          {item.body && <p>{item.body}</p>}
         </li>
       ))
     }

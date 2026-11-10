@@ -307,6 +307,36 @@ h2 {
   list-style: none;
 }
 
+/* Services: kinds of contract, below the kinds of work */
+.subhead {
+  margin: 32px 0 6px;
+  font-size: 20px;
+}
+
+.engagements {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.engagements .card {
+  padding: 14px 18px;
+}
+
+.engagements h4 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.engagements p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
 .two {
   display: grid;
   grid-template-columns: 1fr 1fr;

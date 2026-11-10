@@ -4,9 +4,15 @@ import { ALLOW_PLACEHOLDERS } from 'astro:env/server';
 /** Marker that starts every unapproved placeholder value in home.yaml. */
 export const PLACEHOLDER_PREFIX = 'TODO(jeff)';
 
-/** True once Jeff has replaced the placeholder with real copy. */
-export function isFilled(value: string): boolean {
-  return !value.trimStart().startsWith(PLACEHOLDER_PREFIX);
+/**
+ * True once Jeff has written real copy: the value is present, not empty and
+ * not a placeholder. Optional claims that are left empty or deleted are
+ * therefore never shown.
+ */
+export function isFilled(value: string | undefined): value is string {
+  if (value === undefined) return false;
+  const trimmed = value.trim();
+  return trimmed !== '' && !trimmed.startsWith(PLACEHOLDER_PREFIX);
 }
 
 /** The homepage copy from src/content/site/home.yaml. */

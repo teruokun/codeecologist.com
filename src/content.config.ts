@@ -3,6 +3,9 @@ import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
 const text = z.string().min(1);
+// An optional claim: shown only once it is filled in. Leaving it empty or
+// deleting the key hides it (and keeps it out of the placeholder check).
+const optionalClaim = z.string().optional();
 
 // Tests point this at a fixture directory so that src/content never holds
 // test entries. Declared here because the project has no Node type package.
@@ -68,7 +71,7 @@ const site = defineCollection({
       lead: text,
       primary_cta: text,
       secondary_cta: text,
-      availability: text,
+      availability: optionalClaim,
       graph_alt: text,
       graph_label_root: text,
       graph_label_keystone: text,
@@ -76,7 +79,13 @@ const site = defineCollection({
     services: z.object({
       heading: text,
       subtitle: text,
-      items: z.array(z.object({ title: text, body: text, tag: text })),
+      // What Jeff does, kept separate from how he can be engaged.
+      items: z.array(z.object({ title: text, body: text })),
+      engagements: z.object({
+        heading: text,
+        subtitle: text.optional(),
+        items: z.array(z.object({ title: text, body: text.optional() })),
+      }),
     }),
     proof: z.array(
       z.object({
@@ -98,7 +107,7 @@ const site = defineCollection({
     contact: z.object({
       heading: text,
       subtitle: text,
-      response_time: text,
+      response_time: optionalClaim,
       booking_title: text,
       booking_cta: text,
       booking_url: text,
@@ -107,7 +116,7 @@ const site = defineCollection({
     footer: z.object({
       owner: text,
       location: text,
-      business_name: text,
+      business_name: optionalClaim,
     }),
     links: z.object({
       email: text,
