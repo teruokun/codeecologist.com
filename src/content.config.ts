@@ -112,6 +112,7 @@ const site = defineCollection({
     links: z.object({
       email: text,
       github_url: text,
+      buildwarden_url: text,
       linkedin_url: text,
     }),
   }),

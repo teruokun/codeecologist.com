@@ -96,5 +96,6 @@ home:
   # Each link appears only once its real address is filled in.
   links:
     email: "jeff@codeecologist.com"
-    github_url: "TODO(jeff): GitHub profile URL"
+    github_url: "https://github.com/teruokun"
+    buildwarden_url: "https://github.com/buildwarden"
     linkedin_url: "https://www.linkedin.com/in/jeff-edwards-6301537"
