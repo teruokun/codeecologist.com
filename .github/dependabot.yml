@@ -1,0 +1,55 @@
+# Weekly, grouped version updates. New releases wait 7 days (cooldown) before
+# Dependabot proposes them, so a bad or compromised release has time to be
+# caught first. Security updates are not delayed. Nothing auto-merges: Jeff
+# reads the release notes and merges by hand.
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    cooldown:
+      default-days: 7
+    groups:
+      site:
+        patterns: ['*']
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: npm
+    directory: /deploy
+    schedule:
+      interval: weekly
+      day: monday
+    cooldown:
+      default-days: 7
+    groups:
+      deploy-tools:
+        patterns: ['*']
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    cooldown:
+      default-days: 7
+    groups:
+      actions:
+        patterns: ['*']
+    open-pull-requests-limit: 5
+
+  # Provider versions in infra/ and their .terraform.lock.hcl hashes.
+  - package-ecosystem: opentofu
+    directory: /infra
+    schedule:
+      interval: weekly
+      day: monday
+    cooldown:
+      default-days: 7
+    groups:
+      infra:
+        patterns: ['*']
+    open-pull-requests-limit: 5
