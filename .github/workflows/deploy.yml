@@ -49,6 +49,13 @@ jobs:
         uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:
           subject-checksums: dist/.well-known/site-checksums.txt
+      # The step above covers every file listed in the checksums file, which
+      # cannot list itself. This covers the checksums file, so it can be
+      # verified on its own (the deploy job and the /supply-chain page do).
+      - name: Attest build provenance of the checksums file
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-path: dist/.well-known/site-checksums.txt
       - name: Attest the SBOM (subject is the checksums file)
         uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:

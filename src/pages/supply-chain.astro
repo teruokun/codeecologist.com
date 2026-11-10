@@ -59,7 +59,7 @@ const scorecardUrl = `https://scorecard.dev/viewer/?uri=github.com/${repo}`;
       The build writes the SHA-256 of every file it produces to
       {' '}<a href="/.well-known/site-checksums.txt">/.well-known/site-checksums.txt</a>. GitHub Actions
       then signs a <a href="https://slsa.dev/">SLSA</a> build provenance attestation for each of
-      those files, and an attestation for the SBOM. The deploy job verifies the attestation and
+      those files and for the checksums file itself, and an attestation for the SBOM. The deploy job verifies the attestation and
       every checksum before anything is uploaded.
     </p>
 
