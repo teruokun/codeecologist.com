@@ -25,6 +25,8 @@ src/
   components/  layouts/  pages/  styles/tokens.css
   lib/published.ts       # getPublished(name): non-draft entries, sorted
 public/_headers          # security headers (CSP etc.)
+deploy/                  # wrangler, with its own lockfile; deploy job only
+scripts/checksums.sh     # dist/.well-known/site-checksums.txt for attestation
 infra/                   # OpenTofu; state is local + gitignored
 .github/workflows/{ci,deploy,scorecard}.yml
 .github/dependabot.yml
@@ -70,7 +72,7 @@ tofu apply plan.bin         # ONLY after Jeff approves the plan output
 
 ## Deploy
 
-Push or merge to `main` → `deploy.yml`: build → SBOM → checksums → attest → upload artifact → (job `deploy`, env `production`) download → `gh attestation verify` → `npx wrangler pages deploy dist --project-name=<PROJECT> --branch=main`. Wrangler comes from the lockfile (devDependency), not `wrangler-action`. Infra changes are **not** applied by CI. They're applied locally by `tofu apply` after Jeff approves the plan.
+Push or merge to `main` → `deploy.yml`: build → SBOM → checksums → attest → upload artifact → (job `deploy`, env `production`) download → `gh attestation verify` → `npx wrangler pages deploy dist --project-name=<PROJECT> --branch=main`. Wrangler comes from its own lockfile in `deploy/` (installed only by the deploy job, so it is never in the site build or SBOM), not `wrangler-action`. The deploy job also checks every file in the artifact against the attested checksums, and that no unlisted file is present. Infra changes are **not** applied by CI. They're applied locally by `tofu apply` after Jeff approves the plan.
 
 ## Needs Jeff's explicit approval
 

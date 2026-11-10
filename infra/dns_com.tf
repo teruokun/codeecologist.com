@@ -1,5 +1,5 @@
-# codeecologist.com web records. Mail records are added in Phase 2 and the
-# apex record with the Pages project in Phase 6.
+# codeecologist.com web records. Mail records are in mail.tf and the apex
+# record, which points at the Pages project, is in pages.tf.
 
 # Exists only so the www_to_apex redirect rule has a proxied hostname to match.
 resource "cloudflare_dns_record" "com_www" {

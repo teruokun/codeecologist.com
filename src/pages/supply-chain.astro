@@ -1,0 +1,118 @@
+---
+import Base from '../layouts/Base.astro';
+
+// Facts about how this site is built and deployed. Keep them in step with
+// .github/workflows/deploy.yml, .npmrc and infra/settings.tf.
+const repo = 'teruokun/codeecologist.com';
+const repoUrl = `https://github.com/${repo}`;
+const site = 'https://codeecologist.com';
+const scorecardUrl = `https://scorecard.dev/viewer/?uri=github.com/${repo}`;
+---
+
+<Base
+  title="Supply chain"
+  description="How this site is built, what it depends on, and how to verify that what it serves is what was built."
+>
+  <div class="page prose">
+    <h1>This site's supply chain</h1>
+    <p>
+      This site is a small, static website. It is built and deployed in the open from
+      {' '}<a href={repoUrl}>{repo}</a>. This page lists what goes into it and how you can check that
+      the files you are served are the files that were built.
+    </p>
+
+    <h2>What's pinned, and how</h2>
+    <ul>
+      <li>
+        <strong>npm dependencies</strong> are pinned to exact versions, installed only from the
+        committed lockfile (<code>npm ci</code>), with install scripts turned off.
+      </li>
+      <li>
+        <strong>Node.js</strong> is pinned to one version in <code>.node-version</code>.
+      </li>
+      <li>
+        <strong>GitHub Actions</strong> are pinned to full commit SHAs, not tags. Every workflow
+        starts with no token permissions, and each job is granted only what it needs.
+      </li>
+      <li>
+        <strong>Deploy tools</strong> (Cloudflare's <code>wrangler</code>) have their own lockfile
+        and are installed only in the deploy job, so they are never part of the build.
+      </li>
+      <li>
+        <strong>Updates</strong> come from Dependabot once a week. A new release waits 7 days before
+        it is proposed, and every update is reviewed and merged by hand.
+      </li>
+      <li>
+        <strong>No third-party scripts or requests.</strong> The page loads nothing from any other
+        site, and the Content-Security-Policy enforces that.
+      </li>
+    </ul>
+
+    <h2>SBOM</h2>
+    <p>
+      Each deploy publishes a CycloneDX software bill of materials for the build, including build
+      tools: <a href="/.well-known/sbom.cdx.json">/.well-known/sbom.cdx.json</a>.
+    </p>
+
+    <h2>Checksums and provenance</h2>
+    <p>
+      The build writes the SHA-256 of every file it produces to
+      {' '}<a href="/.well-known/site-checksums.txt">/.well-known/site-checksums.txt</a>. GitHub Actions
+      then signs a <a href="https://slsa.dev/">SLSA</a> build provenance attestation for each of
+      those files, and an attestation for the SBOM. The deploy job verifies the attestation and
+      every checksum before anything is uploaded.
+    </p>
+
+    <h2>Verify it yourself</h2>
+    <p>
+      With the <a href="https://cli.github.com/">GitHub CLI</a> installed:
+    </p>
+    <pre><code>{`# The checksums file: built from this repository by the deploy workflow
+curl -sO ${site}/.well-known/site-checksums.txt
+gh attestation verify site-checksums.txt -R ${repo}
+
+# Any single page, for example the homepage
+curl -s ${site}/ -o index.html
+gh attestation verify index.html -R ${repo}
+
+# The SBOM attestation
+gh attestation verify site-checksums.txt -R ${repo} \\
+  --predicate-type https://cyclonedx.org/bom`}</code></pre>
+    <p>
+      To pin the exact workflow that signed it, add
+      {' '}<code>--signer-workflow {repo}/.github/workflows/deploy.yml</code>.
+    </p>
+
+    <h2>OpenSSF Scorecard</h2>
+    <p>
+      The repository is scored weekly by the
+      {' '}<a href={scorecardUrl}>OpenSSF Scorecard</a>, which checks for practices such as pinned
+      dependencies, branch protection and token permissions.
+    </p>
+
+    <h2>Why some Cloudflare features are off</h2>
+    <p>
+      Cloudflare can rewrite pages as it serves them: obfuscating email addresses, deferring
+      scripts (Rocket Loader) or injecting analytics. Each of those would change the bytes after
+      they were built and attested, so all three are turned off, and that setting is managed in
+      code alongside the DNS.
+    </p>
+
+    <h2>Known limits</h2>
+    <ul>
+      <li>
+        Cloudflare serves the files, so you still trust Cloudflare to serve the bytes it was given.
+        The attestations let you detect a difference, not prevent one.
+      </li>
+      <li>
+        URLs that end in <code>/</code> are served from an <code>index.html</code> file; save the
+        page under that name, as in the example above, before verifying it.
+      </li>
+      <li>
+        Response headers (such as the Content-Security-Policy) come from the
+        {' '}<code>_headers</code> file, which Cloudflare reads as configuration rather than serving.
+        It is covered by the checksums, but headers that Cloudflare adds at the edge are not.
+      </li>
+    </ul>
+  </div>
+</Base>

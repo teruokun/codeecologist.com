@@ -38,6 +38,7 @@ tofu apply plan.bin   # only after Jeff approves the plan output
 | `mail.tf` | `codeecologist.com` mail: Fastmail MX, SPF, DKIM, DMARC, autodiscovery |
 | `dns_dev.tf` | `codeecologist.dev` placeholder and no-mail records |
 | `redirects.tf` | `.dev` to `.com`, and `www` to apex |
+| `pages.tf` | Cloudflare Pages project (Direct Upload, no git source) and its custom domain |
 | `imports.tf` | Import blocks for every managed resource, so state can be rebuilt |
 | `snapshots/` | DNS exports taken before changes; the rollback reference |
 

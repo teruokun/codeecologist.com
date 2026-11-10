@@ -1,0 +1,125 @@
+# Builds, attests and deploys the site on every push to main.
+#
+# The build job holds the signing permissions but never sees the Cloudflare
+# token. The deploy job holds the token but builds nothing: it verifies the
+# attestation on what it downloaded, checks every file against the attested
+# checksums, and only then uploads to Cloudflare Pages.
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write # Sigstore signing certificate for the attestations
+      attestations: write # store the attestations
+      artifact-metadata: write # artifact storage record (actions/attest README)
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          # No dependency cache in a job that can sign (setup-node's own advice).
+          package-manager-cache: false
+      - run: npm ci
+      # Type check, build, then fail on any TODO(jeff) shown in dist/, unless
+      # the repo variable ALLOW_PLACEHOLDERS is "true" (draft banner).
+      - name: Check and build
+        run: npm run check
+        env:
+          ALLOW_PLACEHOLDERS: ${{ vars.ALLOW_PLACEHOLDERS == 'true' }}
+      - name: SBOM
+        run: npm sbom --sbom-format=cyclonedx --sbom-type=application > dist/.well-known/sbom.cdx.json
+      - name: Checksums of every file in dist/
+        run: scripts/checksums.sh
+      - name: Attest build provenance (one subject per file)
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-checksums: dist/.well-known/site-checksums.txt
+      - name: Attest the SBOM (subject is the checksums file)
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-path: dist/.well-known/site-checksums.txt
+          sbom-path: dist/.well-known/sbom.cdx.json
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: site
+          path: dist/
+          # .well-known/ holds the SBOM and checksums; hidden paths are
+          # skipped unless this is set.
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    environment:
+      name: production
+      url: https://codeecologist.com
+    permissions:
+      contents: read
+      attestations: read
+      deployments: write
+    steps:
+      # Only the deploy tools' manifest and lockfile; none of the site source.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: deploy
+          sparse-checkout-cone-mode: true
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: site
+          path: dist
+      - name: Verify the provenance attestation on the checksums file
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh attestation verify dist/.well-known/site-checksums.txt \
+            --repo "$REPO" \
+            --signer-workflow "$REPO/.github/workflows/deploy.yml" \
+            --source-ref refs/heads/main \
+            --deny-self-hosted-runners
+      - name: Check every file against the attested checksums
+        run: |
+          cd dist
+          sha256sum --check --strict --quiet .well-known/site-checksums.txt
+          # No file may be present that the checksums (and so the attestation)
+          # do not cover.
+          find . -type f ! -path ./.well-known/site-checksums.txt | sed 's|^\./||' | LC_ALL=C sort > /tmp/present.txt
+          awk '{ sub(/^[0-9a-f]+  /, ""); print }' .well-known/site-checksums.txt | LC_ALL=C sort > /tmp/attested.txt
+          diff -u /tmp/attested.txt /tmp/present.txt
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - name: Install wrangler from its lockfile
+        working-directory: deploy
+        run: npm ci
+      - name: Deploy to Cloudflare Pages
+        working-directory: deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          PAGES_PROJECT: codeecologist
+        run: >-
+          npx --no-install wrangler pages deploy ../dist
+          --project-name="$PAGES_PROJECT"
+          --branch=main
+          --commit-hash="$GITHUB_SHA"
+          --commit-dirty=false
