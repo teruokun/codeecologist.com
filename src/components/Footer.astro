@@ -15,6 +15,7 @@ const owner = [footer.owner, isFilled(footer.business_name) ? footer.business_na
 const links = [
   { label: addresses.email, href: `mailto:${addresses.email}`, show: isFilled(addresses.email) },
   { label: 'GitHub', href: addresses.github_url, show: isFilled(addresses.github_url) },
+  { label: 'BuildWarden', href: addresses.buildwarden_url, show: isFilled(addresses.buildwarden_url) },
   { label: 'LinkedIn', href: addresses.linkedin_url, show: isFilled(addresses.linkedin_url) },
   { label: 'RSS', href: '/rss.xml', show: hasFeed },
 ].filter((link) => link.show);

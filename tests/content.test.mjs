@@ -141,6 +141,8 @@ test('contact: filled addresses link from the contact section and the footer', (
     email: 'hello@example.com',
     linkedin_url: 'https://www.linkedin.com/in/example',
     booking_url: 'https://cal.com/example/intro',
+    github_url: 'https://github.com/example',
+    buildwarden_url: 'https://github.com/example-org',
   });
   const site = build('contact-filled', undefined, { siteCopy });
   assert.ok(site.ok, site.output);
@@ -152,4 +154,6 @@ test('contact: filled addresses link from the contact section and the footer', (
   const footer = home.slice(home.indexOf('<footer'));
   assert.ok(footer.includes('href="mailto:hello@example.com"'), 'footer links the same email');
   assert.ok(footer.includes('href="https://www.linkedin.com/in/example"'), 'footer links the same LinkedIn');
+  assert.ok(footer.includes('href="https://github.com/example"'), 'footer links GitHub');
+  assert.ok(footer.includes('href="https://github.com/example-org"'), 'footer links the BuildWarden org');
 });
