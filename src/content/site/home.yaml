@@ -82,7 +82,7 @@ home:
     booking_title: "TODO(jeff): 30-min intro call · pick a time"
     booking_cta: "TODO(jeff): Choose a time"
     # Hidden until filled: the booking button needs a real Cal.com URL.
-    booking_url: "TODO(jeff): Cal.com booking URL"
+    booking_url: "https://cal.com/codeecologist"
     direct_title: "TODO(jeff): Or reach me directly"
 
   footer:
@@ -95,6 +95,6 @@ home:
   # contact form: email, LinkedIn and the booking link are the only channels.
   # Each link appears only once its real address is filled in.
   links:
-    email: "TODO(jeff): public contact email address"
+    email: "jeff@codeecologist.com"
     github_url: "TODO(jeff): GitHub profile URL"
-    linkedin_url: "TODO(jeff): LinkedIn profile URL"
+    linkedin_url: "https://www.linkedin.com/in/jeff-edwards-6301537"

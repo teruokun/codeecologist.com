@@ -40,17 +40,21 @@ function walk(dir) {
   );
 }
 
-/** A copy of home.yaml with the given placeholder keys filled in, as a path relative to the root. */
-function filledCopy(values) {
+/**
+ * A copy of home.yaml with the given keys set, whatever they hold now, so a
+ * test does not depend on which copy Jeff has filled in. Returns its path
+ * relative to the root.
+ */
+function copyWith(name, values) {
   let yaml = readFileSync(join(root, 'src/content/site/home.yaml'), 'utf8');
   for (const [key, value] of Object.entries(values)) {
-    const pattern = new RegExp(String.raw`^(\s+${key}: )"TODO\(jeff\):[^"]*"`, 'm');
-    assert.match(yaml, pattern, `home.yaml has a ${key} placeholder`);
-    yaml = yaml.replace(pattern, `$1"${value}"`);
+    const pattern = new RegExp(String.raw`^(\s+${key}: ).*$`, 'm');
+    assert.match(yaml, pattern, `home.yaml has a ${key} key`);
+    yaml = yaml.replace(pattern, (_, prefix) => `${prefix}${JSON.stringify(value)}`);
   }
   mkdirSync(outRoot, { recursive: true });
-  writeFileSync(join(outRoot, 'home-filled.yaml'), yaml);
-  return 'tests/.tmp/home-filled.yaml';
+  writeFileSync(join(outRoot, `${name}.yaml`), yaml);
+  return `tests/.tmp/${name}.yaml`;
 }
 
 after(() => rmSync(outRoot, { recursive: true, force: true }));
@@ -112,12 +116,18 @@ test('a talk dated in the future fails the build', () => {
 });
 
 test('contact: no form, no endpoint, no third-party script', () => {
-  const site = build('contact-empty');
+  const siteCopy = copyWith('home-placeholders', {
+    email: 'TODO(jeff): public contact email address',
+    linkedin_url: 'TODO(jeff): LinkedIn profile URL',
+    booking_url: 'TODO(jeff): Cal.com booking URL',
+  });
+  const site = build('contact-empty', undefined, { siteCopy });
   assert.ok(site.ok, site.output);
   const home = site.read('index.html');
   assert.ok(home.includes('id="contact"'), 'the contact section is always shown');
   assert.ok(!/<form[\s>]/.test(home), 'the homepage has no form');
   assert.ok(!home.includes('mailto:'), 'no mailto link while the address is a placeholder');
+  assert.ok(!home.includes('cal.com'), 'no booking link while its URL is a placeholder');
   for (const file of walk(site.outDir)) {
     assert.ok(!readFileSync(file, 'utf8').includes('challenges.cloudflare.com'), `${file} mentions Turnstile`);
   }
@@ -127,7 +137,7 @@ test('contact: no form, no endpoint, no third-party script', () => {
 });
 
 test('contact: filled addresses link from the contact section and the footer', () => {
-  const siteCopy = filledCopy({
+  const siteCopy = copyWith('home-filled', {
     email: 'hello@example.com',
     linkedin_url: 'https://www.linkedin.com/in/example',
     booking_url: 'https://cal.com/example/intro',
