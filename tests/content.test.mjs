@@ -115,6 +115,42 @@ test('a talk dated in the future fails the build', () => {
   assert.match(site.output, /Only talks already given may be listed/);
 });
 
+test('optional claims: empty ones are hidden, filled ones shown', () => {
+  const hidden = build('claims-hidden', undefined, {
+    siteCopy: copyWith('home-claims-hidden', { availability: '', response_time: '', business_name: '' }),
+  });
+  assert.ok(hidden.ok, hidden.output);
+  const home = hidden.read('index.html');
+  assert.ok(!home.includes('class="avail"'), 'no availability line');
+  assert.ok(!home.includes('business day'), 'no response time');
+  assert.ok(!/©[^<]*·\s*·/.test(home), 'no empty business name in the footer');
+
+  const shown = build('claims-shown', undefined, {
+    siteCopy: copyWith('home-claims-shown', {
+      availability: 'Example availability',
+      response_time: 'Example response time',
+      business_name: 'Example LLC',
+    }),
+  });
+  assert.ok(shown.ok, shown.output);
+  const page = shown.read('index.html');
+  for (const text of ['Example availability', 'Example response time', 'Example LLC']) {
+    assert.ok(page.includes(text), `${text} is shown`);
+  }
+});
+
+test('services: kinds of work and kinds of contract are separate lists', () => {
+  const site = build('services');
+  assert.ok(site.ok, site.output);
+  const home = site.read('index.html');
+  const start = home.indexOf('id="services"');
+  const services = home.slice(start, home.indexOf('</section>', start));
+  assert.ok(services.includes('class="grid3"') && services.includes('class="engagements"'));
+  assert.ok(!services.includes('class="tag"'), 'service cards carry no pricing tag');
+  assert.ok(!/on call|incident response/i.test(home), 'no on-call or incident-response offer');
+  assert.ok(!home.includes('Standards work'), 'no standards-work claim');
+});
+
 test('contact: no form, no endpoint, no third-party script', () => {
   const siteCopy = copyWith('home-placeholders', {
     email: 'TODO(jeff): public contact email address',

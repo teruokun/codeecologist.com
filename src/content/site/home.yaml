@@ -6,7 +6,8 @@
 # is "true" (which also shows a "draft site" banner).
 #
 # Fields marked "hidden until filled" are unconfirmed claims or missing links:
-# they are not rendered at all while they are still placeholders.
+# they are not rendered at all while they are still placeholders. Fields
+# marked "optional claim" can also be left empty or deleted to hide them.
 
 home:
   site_name: Code Ecologist
@@ -18,35 +19,41 @@ home:
     lead: "TODO(jeff): I help engineering and security teams understand, secure and sustain the open source they depend on, from dependency risk to build provenance. 15 years as a senior engineer at Amazon."
     primary_cta: "TODO(jeff): Book a 30-min intro call"
     secondary_cta: "TODO(jeff): See services"
-    # Hidden until filled: availability is an unconfirmed claim.
-    availability: "TODO(jeff): Taking new engagements: 2 days/week available"
+    # Optional claim.
+    availability: "Taking new engagements: 3 days/week available"
     graph_alt: "TODO(jeff): Dependency graph illustration"
     graph_label_root: "TODO(jeff): your app"
     graph_label_keystone: "TODO(jeff): the keystone package"
 
   services:
     heading: "TODO(jeff): What I do"
+    # The mockup's subtitle described services and pricing together; it needs
+    # rewording now that they are separate lists.
     subtitle: "TODO(jeff): Three ways to work together, sized to what you need."
+    # The kinds of work. No pricing here: that is in engagements below.
     items:
       - title: "TODO(jeff): Supply chain risk assessment"
-        body: "TODO(jeff): A map of what you depend on, where the risk concentrates, and a prioritized plan. Fixed scope, fixed price."
-        tag: "TODO(jeff): Fixed price"
+        body: "TODO(jeff): A map of what you depend on, where the risk concentrates, and a prioritized plan."
       - title: "TODO(jeff): Build & pipeline hardening"
         body: "TODO(jeff): SLSA-aligned builds, provenance and signing, SBOMs that are actually useful, and dependency policy that doesn't slow teams down."
-        tag: "TODO(jeff): Project or daily rate"
-      - title: "TODO(jeff): Advisory & retainer"
-        body: "TODO(jeff): A senior voice on call for architecture reviews, incident response for dependency compromises, and roadmap decisions."
-        tag: "TODO(jeff): Hourly or monthly"
+      # No on-call or incident-response wording until Jeff offers it.
+      - title: "TODO(jeff): Advisory"
+        body: "TODO(jeff): A senior voice for architecture reviews and roadmap decisions."
+    # The kinds of contract, from the mockup's pricing tags. The subtitle and
+    # each item's body are optional.
+    engagements:
+      heading: "TODO(jeff): Ways to work together"
+      items:
+        - title: "TODO(jeff): Fixed-scope, fixed-price project"
+        - title: "TODO(jeff): Daily rate"
+        - title: "TODO(jeff): Hourly"
+        - title: "TODO(jeff): Monthly retainer"
 
   proof:
     - lead: "TODO(jeff): 15 years"
       rest: "TODO(jeff): senior engineer at Amazon"
     - lead: "TODO(jeff): BuildWarden"
       rest: "TODO(jeff): maintainer"
-    # Hidden until filled: standards work is an unconfirmed claim.
-    - lead: "TODO(jeff): Standards work"
-      rest: "TODO(jeff): OpenSSF, SLSA, CycloneDX/SPDX"
-      hidden_until_filled: true
     - lead: "TODO(jeff): Biology background"
       rest: "TODO(jeff): ecosystems thinking, literally"
 
@@ -77,8 +84,8 @@ home:
   contact:
     heading: "TODO(jeff): Let's talk"
     subtitle: "TODO(jeff): Book a time directly, or write to me."
-    # Hidden until filled: a response time is an unconfirmed claim.
-    response_time: "TODO(jeff): I'll reply within a business day."
+    # Optional claim.
+    response_time: "I'll reply within a business day."
     booking_title: "TODO(jeff): 30-min intro call · pick a time"
     booking_cta: "TODO(jeff): Choose a time"
     # Hidden until filled: the booking button needs a real Cal.com URL.
@@ -88,8 +95,8 @@ home:
   footer:
     owner: "TODO(jeff): Jeff"
     location: "TODO(jeff): Seattle, WA"
-    # Hidden until filled.
-    business_name: "TODO(jeff): Business name LLC"
+    # Optional claim: empty until the business is formed.
+    business_name: ""
 
   # Addresses shown in both the contact section and the footer. There is no
   # contact form: email, LinkedIn and the booking link are the only channels.
