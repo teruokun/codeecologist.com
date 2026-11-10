@@ -36,7 +36,7 @@ infra/                   # OpenTofu; state is local + gitignored
 npm ci                      # always; never `npm install` in CI
 npm run dev                 # local dev
 npm run build               # astro build -> dist/
-npm run check               # astro check + placeholder scan + talks-date check
+npm run check               # astro check + build + placeholder scan of dist/
 npm run preview             # astro preview (serves dist/)
 cd infra && tofu init -lockfile=readonly && tofu plan -out=plan.bin
 tofu apply plan.bin         # ONLY after Jeff approves the plan output
@@ -64,7 +64,7 @@ tofu apply plan.bin         # ONLY after Jeff approves the plan output
 - **Talks:** only talks **actually given**. The schema requires `date <= build date` and fails the build otherwise. There is no "proposed", "upcoming" or "accepted" status, ever. (The mockup's "Proposed" rows are layout examples only. Do not ship them.)
 - **Essays:** Jeff writes them. Never draft, expand, summarize or paraphrase essay text, including the BuildWarden philosophy essay. Claude may create empty stub files with frontmatter and `draft: true` when asked.
 - **Editing:** Jeff wants to keep his own voice. If asked about copy, give inline suggestions or comments, not rewrites.
-- **Placeholders:** all homepage and service copy lives in `src/content/site/home.yaml`. Each placeholder value starts with `TODO(jeff):`. `npm run check` lists them, and the production deploy fails while any remain unless the repo variable `ALLOW_PLACEHOLDERS=true` is set. That variable also shows a "draft site" banner.
+- **Placeholders:** all homepage and service copy lives in `src/content/site/home.yaml`. Each placeholder value starts with `TODO(jeff):`. `npm run check` builds the site and lists them. The production deploy fails while any placeholder appears in the built site, unless the repo variable `ALLOW_PLACEHOLDERS=true` is set (which also shows a "draft site" banner). Placeholders that are not rendered (fields marked hidden until filled, and the Talks, Writing and News copy while those sections are hidden) are listed as pending and don't block a deploy (decided 2026-11-10).
 - Facts Jeff has confirmed and may appear (in his final wording): 15 years as a senior engineer at Amazon; BuildWarden maintainer; biology background; based in Seattle.
 - Every collection entry supports `draft: true`. Homepage Talks, Writing and News sections (and their nav links) render **only if** the collection has at least one non-draft entry.
 

@@ -298,15 +298,6 @@ h2 {
   margin: 0 0 24px;
 }
 
-.grid3 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
 /* Services: kinds of contract, below the kinds of work */
 .subhead {
   margin: 32px 0 6px;
@@ -372,6 +363,12 @@ h2 {
   padding: 2px 9px;
   border-radius: 99px;
   margin-top: 12px;
+  font-weight: 600;
+}
+
+.docs-link {
+  margin-left: 10px;
+  font-size: 13px;
   font-weight: 600;
 }
 
@@ -457,7 +454,6 @@ h2 {
 
 @media (max-width: 760px) {
   .hero,
-  .grid3,
   .two,
   .contact {
     grid-template-columns: 1fr;

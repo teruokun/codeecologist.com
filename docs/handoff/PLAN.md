@@ -110,7 +110,7 @@ Steps
      Cross-Origin-Opener-Policy: same-origin
    ```
    Astro may emit inline scripts or styles. If it does, either configure it to emit external files or use hashes; **don't** add `'unsafe-inline'`. Turnstile host requirements: **VERIFY** at https://developers.cloudflare.com/turnstile/reference/content-security-policy/. HSTS comes from the zone setting, not `_headers`.
-6. `npm run check` = `astro check` + `scripts/check-placeholders.mjs` (scans `dist/` and `home.yaml` for `TODO(jeff)`).
+6. `npm run check` = `astro check` + `astro build` + `scripts/check-placeholders.mjs` (fails on `TODO(jeff)` in `dist/`; lists the rest of `home.yaml` as pending; updated 2026-11-10).
 
 Verify: `npm ci && npm run build && npm run preview`. Layout matches the mockup at 375px and 1280px, in light and dark mode. No requests to third-party hosts on load (DevTools network panel, or `grep -rE 'https?://' dist | grep -v codeecologist`). No console errors. axe or Lighthouse accessibility ≥ 95 locally.
 Rollback: revert the PR (nothing has been deployed yet).
@@ -186,9 +186,9 @@ Files: `.github/workflows/ci.yml`, `deploy.yml`, `scorecard.yml`, `.github/depen
 Steps
 1. Pages project (Tofu `cloudflare_pages_project`, Direct Upload, production branch `main`, **no** git source), `cloudflare_pages_domain` for `codeecologist.com`, then the apex CNAME (import it if auto-created). Alternative: `npx wrangler pages project create PROJECT --production-branch=main`, then import.
 2. Resolve every action to a SHA (CLAUDE.md rule 4). Expected set: `actions/checkout`, `actions/setup-node`, `actions/upload-artifact`, `actions/download-artifact`, `actions/attest`, `ossf/scorecard-action`, `github/codeql-action/upload-sarif`. Optional: `step-security/harden-runner` in audit mode (adds a vendor; ask Jeff).
-3. `ci.yml` (pull_request + push to non-main): `permissions: {}`; job `contents: read`; `npm ci` → `npm run check` → `npm run build` → `npm sbom ...` (smoke). No secrets. Also `tofu fmt -check` and `tofu validate` (no credentials needed).
+3. `ci.yml` (pull_request + push to non-main): `permissions: {}`; job `contents: read`; `npm ci` → `npm run check` (includes the build) → `npm sbom ...` (smoke). No secrets. Also `tofu fmt -check` and `tofu validate` (no credentials needed).
 4. `deploy.yml` (push to `main`, plus `workflow_dispatch`), with `permissions: {}` at the top:
-   - job `build`: permissions `contents: read, id-token: write, attestations: write, artifact-metadata: write` (the last one is from the actions/attest README; **VERIFY** it's still required). Steps: checkout (`persist-credentials: false`) → setup-node (`node-version-file`, `cache: npm`) → `npm ci` → `npm run check` (fails on placeholders unless `vars.ALLOW_PLACEHOLDERS == 'true'`) → `npm run build` → `npm sbom --sbom-format=cyclonedx --sbom-type=application > dist/.well-known/sbom.cdx.json` → `scripts/checksums.sh` writes `dist/.well-known/site-checksums.txt` (`sha256sum` of every file in dist except itself, sorted, paths relative). Keep this under 1024 entries, the actions/attest subject limit. Then:
+   - job `build`: permissions `contents: read, id-token: write, attestations: write, artifact-metadata: write` (the last one is from the actions/attest README; **VERIFY** it's still required). Steps: checkout (`persist-credentials: false`) → setup-node (`node-version-file`, `cache: npm`) → `npm ci` → `npm run check` (builds `dist/`, then fails on placeholders shown in it unless `vars.ALLOW_PLACEHOLDERS == 'true'`; updated 2026-11-10, so no separate `npm run build` step is needed) → `npm sbom --sbom-format=cyclonedx --sbom-type=application > dist/.well-known/sbom.cdx.json` → `scripts/checksums.sh` writes `dist/.well-known/site-checksums.txt` (`sha256sum` of every file in dist except itself, sorted, paths relative). Keep this under 1024 entries, the actions/attest subject limit. Then:
      ```yaml
      - uses: actions/attest@<sha> # v4.x
        with:

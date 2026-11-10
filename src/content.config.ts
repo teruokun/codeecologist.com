@@ -101,7 +101,13 @@ const site = defineCollection({
       heading: text,
       subtitle: text,
       items: z.array(
-        z.object({ title: text, url: z.url().optional(), body: text, tag: text }),
+        z.object({
+          title: text,
+          url: z.url().optional(),
+          body: text,
+          tag: text,
+          docs_url: z.url().optional(),
+        }),
       ),
     }),
     contact: z.object({

@@ -145,10 +145,55 @@ test('services: kinds of work and kinds of contract are separate lists', () => {
   const home = site.read('index.html');
   const start = home.indexOf('id="services"');
   const services = home.slice(start, home.indexOf('</section>', start));
-  assert.ok(services.includes('class="grid3"') && services.includes('class="engagements"'));
+  assert.ok(services.includes('class="two"') && services.includes('class="engagements"'));
   assert.ok(!services.includes('class="tag"'), 'service cards carry no pricing tag');
   assert.ok(!/on call|incident response/i.test(home), 'no on-call or incident-response offer');
   assert.ok(!home.includes('Standards work'), 'no standards-work claim');
+});
+
+/** Run the placeholder check against a build directory, without the override. */
+function checkPlaceholders(outDir) {
+  const env = { ...process.env };
+  delete env.ALLOW_PLACEHOLDERS;
+  const result = spawnSync(process.execPath, [join(root, 'scripts/check-placeholders.mjs'), outDir], {
+    cwd: root,
+    env,
+    encoding: 'utf8',
+  });
+  return { ok: result.status === 0, output: `${result.stdout}${result.stderr}` };
+}
+
+test('placeholders: hidden ones do not block, shown ones do', () => {
+  // Hidden placeholders: a proof item marked hidden_until_filled, and the
+  // headings of sections whose collections are empty.
+  const hiddenCopy = copyWith('placeholders-hidden', {
+    location: 'Seattle, WA',
+  });
+  let yaml = readFileSync(join(root, hiddenCopy), 'utf8');
+  yaml = yaml.replace(
+    /^  proof:\n/m,
+    '  proof:\n    - lead: "TODO(jeff): hidden lead"\n      rest: "TODO(jeff): hidden rest"\n      hidden_until_filled: true\n',
+  );
+  yaml = yaml.replace(/^(  talks:\n    heading: ).*$/m, '$1"TODO(jeff): Talks"');
+  writeFileSync(join(root, hiddenCopy), yaml);
+  const hidden = build('placeholders-hidden', undefined, { siteCopy: hiddenCopy });
+  assert.ok(hidden.ok, hidden.output);
+  const hiddenCheck = checkPlaceholders(hidden.outDir);
+  assert.ok(hiddenCheck.ok, hiddenCheck.output);
+
+  // The same talks heading placeholder fails once a talk is published.
+  const published = build('placeholders-published', 'published', { siteCopy: hiddenCopy });
+  assert.ok(published.ok, published.output);
+  const publishedCheck = checkPlaceholders(published.outDir);
+  assert.ok(!publishedCheck.ok, 'a shown section heading placeholder must fail the check');
+
+  // Any placeholder in always-shown copy fails.
+  const shownCopy = copyWith('placeholders-shown', { location: 'TODO(jeff): Seattle, WA' });
+  const shown = build('placeholders-shown', undefined, { siteCopy: shownCopy });
+  assert.ok(shown.ok, shown.output);
+  const shownCheck = checkPlaceholders(shown.outDir);
+  assert.ok(!shownCheck.ok, 'a shown placeholder must fail the check');
+  assert.match(shownCheck.output, /index\.html/);
 });
 
 test('contact: no form, no endpoint, no third-party script', () => {
